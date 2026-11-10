@@ -1,0 +1,292 @@
+/* v1.53.9 — compact admin image management with collapsed groups and safe bulk delete */
+
+.admin-slot-group {
+  margin: 0 0 9px;
+  border: 1px solid #51455b;
+  border-radius: 11px;
+  overflow: hidden;
+  background: #2d2535;
+}
+
+.admin-slot-group>summary,
+.admin-gallery-group>summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 11px 13px;
+  cursor: pointer;
+  list-style: none;
+  color: #f5d98f;
+  font-size: 12px;
+  font-weight: 800;
+  user-select: none;
+}
+
+.admin-slot-group>summary::-webkit-details-marker,
+.admin-gallery-group>summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-slot-group>summary::after,
+.admin-gallery-group>summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: #45384e;
+  color: #f5d98f;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.admin-slot-group[open]>summary::after,
+.admin-gallery-group[open]>summary::after {
+  content: "−";
+}
+
+.admin-slot-group>summary small {
+  margin-left: auto;
+  color: #c3b2cc;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.admin-slot-group-content {
+  padding: 0 7px 8px;
+}
+
+.admin-gallery-groups {
+  display: grid;
+  gap: 9px;
+}
+
+.admin-gallery-group {
+  min-width: 0;
+  border: 1px solid #51455b;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #2d2535;
+}
+
+.admin-gallery-group>summary {
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+
+.admin-gallery-group-count {
+  margin-left: auto;
+  color: #c9b9d1;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-gallery-group[open]>summary {
+  border-bottom: 1px solid #51455b;
+  background: #352b3e;
+}
+
+.admin-gallery-group .admin-gallery {
+  padding: 13px;
+}
+
+.admin-bulk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 9px;
+  padding: 11px 13px;
+  border: 1px solid #5a4a65;
+  border-radius: 12px;
+  background: #2e2637;
+}
+
+.admin-bulk-select-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  color: #f1e7f3;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-bulk-select-all input,
+.admin-image-bulk-check input {
+  width: 17px;
+  height: 17px;
+  accent-color: #e9bd62;
+  cursor: pointer;
+}
+
+.admin-bulk-count {
+  margin-left: auto;
+  color: #cdbed5;
+  font-size: 11px;
+}
+
+.admin-bulk-count b {
+  color: #f6d987;
+  font-size: 14px;
+}
+
+.admin-bulk-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #b75b65;
+  border-radius: 9px;
+  background: #713843;
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-bulk-delete:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+}
+
+.admin-image-bulk-check {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 29px;
+  padding: 4px 7px;
+  border: 1px solid #665672;
+  border-radius: 8px;
+  background: #211a2beF;
+  color: #f5edf7;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-image-bulk-check input {
+  width: 14px;
+  height: 14px;
+}
+
+.admin-image-bulk-check.disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.admin-image-card .admin-image-select {
+  padding-top: 47px;
+}
+
+@media (max-width:600px) {
+  .admin-bulk-toolbar {
+    gap: 8px;
+    padding: 9px 10px;
+  }
+  .admin-bulk-select-all {
+    flex: 1 1 100%;
+    font-size: 11px;
+  }
+  .admin-bulk-count {
+    margin-left: 0;
+  }
+  .admin-bulk-delete {
+    margin-left: auto;
+    min-height: 42px;
+    padding: 9px 11px;
+  }
+  .admin-gallery-group>summary {
+    min-height: 48px;
+  }
+  .admin-gallery-group .admin-gallery {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 9px;
+    padding: 9px;
+  }
+  .admin-image-bulk-check {
+    top: 10px;
+    left: 10px;
+  }
+}
+
+/* v1.53.11 — keep game album library categories collapsed until requested */
+
+.puzzle-album-groups {
+  gap: 9px;
+}
+
+.puzzle-album-group {
+  min-width: 0;
+  border: 1px solid #51455b;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #2d2535;
+}
+
+.puzzle-album-group>summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 46px;
+  padding: 11px 13px;
+  cursor: pointer;
+  list-style: none;
+  color: #f5d98f;
+  font-size: 12px;
+  font-weight: 800;
+  user-select: none;
+}
+
+.puzzle-album-group>summary::-webkit-details-marker {
+  display: none;
+}
+
+.puzzle-album-group>summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: #45384e;
+  color: #f5d98f;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.puzzle-album-group[open]>summary::after {
+  content: "−";
+}
+
+.puzzle-album-group[open]>summary {
+  border-bottom: 1px solid #51455b;
+  background: #352b3e;
+}
+
+.puzzle-album-group-count {
+  margin-left: auto;
+  color: #c9b9d1;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.puzzle-album-group-content {
+  padding: 12px;
+}

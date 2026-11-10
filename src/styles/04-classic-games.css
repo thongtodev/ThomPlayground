@@ -1,0 +1,735 @@
+/* Caro: 3×3 and 10×10 share fixed-size cells; images replace content, not layout. */
+
+.caro-settings {
+  display: grid;
+  gap: 12px;
+}
+
+.caro-live-settings {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+}
+
+.caro-live-settings label {
+  display: grid;
+  gap: 5px;
+  color: #e5ddec;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.caro-live-settings select {
+  max-width: 180px;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid #685575;
+  border-radius: 9px;
+  background: #33283d;
+  color: #fff;
+  font: inherit;
+}
+
+.caro-new-button {
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid #685575;
+  border-radius: 9px;
+  background: #463650;
+  color: #fff;
+  cursor: pointer;
+}
+
+.caro-board-viewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.caro-board-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 10px;
+}
+
+.tic-board.caro-board-3 {
+  width: min(100%,390px);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  grid-template-rows: repeat(3,minmax(0,1fr));
+  gap: 9px;
+}
+
+.tic-board.caro-board-10 {
+  width: calc(min(100vw - 78px, 610px) * var(--caro-zoom));
+  margin-inline: auto;
+  max-width: none;
+  aspect-ratio: 1;
+  display: grid;
+  gap: 2px;
+  flex: none;
+}
+
+.caro-board-10 .tic-cell {
+  border-radius: 3px;
+  font-size: clamp(9px,1.5vw,20px);
+}
+
+.caro-board-10 .tic-cell:hover:not(:disabled) {
+  background: #51415e;
+}
+
+.caro-board-10 .tic-token .tic-mark {
+  width: 40%;
+  height: 40%;
+  font-size: clamp(7px,1vw,12px);
+  border: 1px solid #fff;
+  border-radius: 3px;
+}
+
+.caro-board-10 .tic-cell.winning-cell:after {
+  border-width: 2px;
+  border-radius: 3px;
+}
+
+.tic-token.no-image {
+  display: grid;
+  place-items: center;
+}
+
+.tic-symbol {
+  font-size: clamp(32px,7vw,64px);
+  font-weight: 900;
+  line-height: 1;
+  color: #f5d36f;
+}
+
+.o-cell .tic-symbol {
+  color: #f69b88;
+}
+
+.caro-board-10 .tic-symbol {
+  font-size: clamp(9px,2vw,25px);
+}
+
+.caro-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 11px;
+  font-size: 12px;
+  color: #e5ddec;
+}
+
+.caro-zoom-controls button {
+  min-width: 34px;
+  min-height: 34px;
+  border: 1px solid #685575;
+  border-radius: 9px;
+  background: #463650;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.caro-zoom-controls button:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.caro-zoom-controls b {
+  font-variant-numeric: tabular-nums;
+  min-width: 34px;
+  text-align: center;
+}
+
+.caro-mobile-hint {
+  font-size: 11px;
+  color: #c9bcd2;
+  margin: 9px 0 0;
+}
+
+@media (max-width:600px) {
+  .tic-board.caro-board-3 {
+    width: min(100%,340px);
+    gap: 7px;
+  }
+  .tic-board.caro-board-10 {
+    gap: 1px;
+  }
+  .caro-board-10 .tic-cell {
+    border-radius: 2px;
+  }
+  .caro-board-10 .tic-symbol {
+    font-size: clamp(10px,3vw,22px);
+  }
+  .caro-live-settings {
+    gap: 8px;
+  }
+  .caro-live-settings select {
+    max-width: 140px;
+  }
+}
+
+/* v1.8 - Caro 10x10, no tile content may affect the board geometry. */
+
+.tic-board.caro-board-10 {
+  width: calc(min(100vw - 78px, 560px) * var(--caro-zoom));
+  grid-template-columns: repeat(10,minmax(0,1fr));
+  grid-template-rows: repeat(10,minmax(0,1fr));
+  gap: 3px;
+}
+
+.caro-board-10 .tic-cell {
+  border-radius: 5px;
+  border-width: 1px;
+}
+
+.caro-board-10 .tic-symbol {
+  font-size: clamp(13px,3vw,34px);
+}
+
+.caro-board-10 .tic-token .tic-mark {
+  width: 38%;
+  height: 38%;
+  min-width: 0;
+  font-size: clamp(8px,1.3vw,14px);
+  right: 0;
+  bottom: 0;
+  border-radius: 4px;
+}
+
+@media (max-width:600px) {
+  .tic-board.caro-board-10 {
+    gap: 2px;
+  }
+}
+
+/* v1.8 - 3D whack arena with a cutout character emerging from each hole. */
+
+.mole-arena {
+  width: min(100%,var(--mole-board-width,680px));
+  margin: auto;
+  padding: 17px 13px 20px;
+  border: 3px solid #ad7d54;
+  border-radius: 27px;
+  background: linear-gradient(145deg,#f2cc88,#b67b4d 55%,#8d593b);
+  box-shadow: inset 0 7px 0 #ffe7b7,inset 0 -12px 0 #74452e,0 15px 0 #493248,0 22px 28px #0005;
+  perspective: 800px;
+}
+
+.mole-arena .mole-grid {
+  width: 100%;
+  gap: clamp(9px,2.2vw,19px);
+  transform: rotateX(7deg);
+  transform-origin: center bottom;
+}
+
+.mole-arena .mole-hole {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  aspect-ratio: 1.15;
+  min-height: 0;
+  border: 0 !important;
+  border-radius: 45%;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0;
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.mole-pit {
+  position: absolute;
+  z-index: 0;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  height: 63%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 65%,#080811 0 39%,#1e1527 52%,#493048 71%,#64475b 100%);
+  box-shadow: inset 0 12px 12px #000c,0 6px 0 #6d4934,0 9px 7px #24152277;
+  pointer-events: none;
+}
+
+.mole-character {
+  position: absolute;
+  z-index: 2;
+  left: 13%;
+  bottom: 13%;
+  width: 74%;
+  height: 83%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  pointer-events: none;
+  animation: mole-rise-3d .24s cubic-bezier(.18,.95,.2,1.1) both;
+  filter: drop-shadow(0 6px 3px #0e0b13a6);
+}
+
+.mole-character img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+  transform: scale(var(--mole-character-scale,1.25));
+  transform-origin: center bottom;
+}
+
+.mole-character.is-bomb img {
+  filter: drop-shadow(0 0 6px #ff634d);
+}
+
+.mole-front-rim {
+  position: absolute;
+  z-index: 2;
+  left: 2%;
+  right: 2%;
+  bottom: -10%;
+  height: 43%;
+  border-radius: 50%;
+  background: linear-gradient(180deg,#8b6147 0%,#bd8658 35%,#e5ae72 58%,#9c6847 100%);
+  border-top: 7px solid #dba56f;
+  box-shadow: 0 -3px 6px #0005;
+  pointer-events: none;
+}
+
+.mole-bomb-overlay {
+  position: absolute;
+  top: 8%;
+  right: 12%;
+  z-index: 2;
+  font-size: clamp(15px,2.8vw,24px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px #000b);
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+@keyframes mole-rise-3d {
+  from {
+    transform: translateY(70%) scale(.8);
+    opacity: .2;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.mole-visual-legend {
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 19px;
+}
+
+.mole-visual-legend>span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 62px;
+  background: #30263b;
+  border: 1px solid #715774;
+  color: #f8e9d3;
+}
+
+.mole-visual-legend>span>img,.mole-legend-bomb {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  object-fit: contain;
+  border-radius: 9px;
+  background: #4b3c56;
+  position: relative;
+}
+
+.mole-legend-bomb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mole-legend-bomb i {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  font-size: 17px;
+  font-style: normal;
+  background: #d93540;
+  border-radius: 50%;
+}
+
+.mole-visual-legend b {
+  font-size: 11px;
+}
+
+.mole-arena button:active .mole-character {
+  filter: brightness(1.3);
+}
+
+@media (hover:none) {
+  .mole-arena .mole-hole {
+    cursor: pointer;
+  }
+}
+
+/* Reaction bomb mode */
+
+.reaction-legend {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+}
+
+.reaction-legend>span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #382e42;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.reaction-legend img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 7px;
+}
+
+.reaction-bomb-icon {
+  font-size: 24px;
+}
+
+.reaction-zone.reaction-trap {
+  background: #d85e67;
+  color: #fff;
+}
+
+.reaction-zone.bomb-hit {
+  background: #9c3347;
+  color: #fff;
+}
+
+.reaction-zone.avoided {
+  background: #79c9ae;
+  color: #153a31;
+}
+
+.reaction-bomb-visual {
+  width: clamp(110px,30vw,160px);
+  height: clamp(110px,30vw,160px);
+  display: grid;
+  place-items: center;
+}
+
+.reaction-bomb-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.reaction-bomb-visual span {
+  font-size: clamp(72px,16vw,120px);
+}
+
+.reaction-zone:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Album and square original preview */
+
+.puzzle-album-admin {
+  margin: 0 0 22px;
+}
+
+.puzzle-album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+  gap: 12px;
+}
+
+.puzzle-album-option {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid #5c4969;
+  border-radius: 12px;
+  background: #251d2e;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.puzzle-album-option.active {
+  border-color: #f4d27a;
+  background: #43344e;
+}
+
+.puzzle-album-option input {
+  width: 19px;
+  height: 19px;
+  accent-color: #f4d27a;
+}
+
+.puzzle-album-option img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #392f43;
+  border-radius: 8px;
+}
+
+.puzzle-album-option span {
+  overflow-wrap: anywhere;
+}
+
+.puzzle-sample-square {
+  width: min(100%,320px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.puzzle-sample-square img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: fill;
+}
+
+.puzzle-original {
+  margin: 13px 0 0;
+  text-align: left;
+}
+
+.puzzle-original summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.puzzle-original img {
+  display: block;
+  max-width: 100%;
+  max-height: 250px;
+  margin: 10px auto;
+  object-fit: contain;
+}
+
+.mole-setting-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.mole-setting-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.mole-setting-grid input {
+  width: 100%;
+  accent-color: #f6cf67;
+}
+
+.mole-appearance-settings {
+  margin-bottom: 20px;
+}
+
+/* Let the enlarged cutout rise over adjacent holes; pit and rim stay in their own layers. */
+
+.mole-arena {
+  position: relative;
+  overflow: visible;
+}
+
+.mole-arena .mole-grid {
+  overflow: visible;
+}
+
+.mole-arena .mole-hole {
+  overflow: visible;
+}
+
+.mole-arena .mole-hole.active {
+  z-index: 5;
+}
+
+/* Native slipper cursor, consistent across the arena, holes and their overlays.
+   Do not depend on React hover state or JS mousemove; disabled buttons must match too. */
+
+@media (hover: hover) and (pointer: fine) {
+  /* Keep one native slipper cursor across the board. Children inherit it instead of
+     repeatedly resolving/replacing the image as the pointer crosses holes. */
+  .mole-arena {
+    cursor: var(--slipper-cursor, url('/assets/slipper-cursor.png') 29 13, pointer) !important;
+  }
+  .mole-arena *, .mole-arena button, .mole-arena button:disabled,
+  .mole-arena button:hover, .mole-arena button:active {
+    cursor: inherit !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .mole-arena, .mole-arena * {
+    cursor: pointer !important;
+  }
+}
+
+/* Game availability controls */
+
+.game-toggle-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.game-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 13px 17px;
+  border-radius: 16px;
+  background: #30283d;
+  border: 1px solid #715a7b;
+  cursor: pointer;
+}
+
+.game-toggle-row.disabled {
+  opacity: .78;
+}
+
+.game-toggle-icon {
+  font-size: 28px;
+  flex: 0 0 36px;
+  text-align: center;
+}
+
+.game-toggle-name {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.game-toggle-name b {
+  font-size: 15px;
+  color: #fff4dc;
+}
+
+.game-toggle-name small {
+  font-size: 12px;
+  color: #d5c3dc;
+}
+
+.game-toggle-row input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.game-toggle-track {
+  flex: 0 0 52px;
+  height: 29px;
+  border-radius: 30px;
+  background: #695d75;
+  position: relative;
+  transition: background .18s;
+}
+
+.game-toggle-track:before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .18s;
+}
+
+.game-toggle-row input:checked+.game-toggle-track {
+  background: #51a77e;
+}
+
+.game-toggle-row input:checked+.game-toggle-track:before {
+  transform: translateX(23px);
+}
+
+.game-toggle-row input:focus-visible+.game-toggle-track {
+  outline: 3px solid #f4d277;
+  outline-offset: 4px;
+}
+
+.no-games-message {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 32px;
+  border-radius: 18px;
+  background: #30263b;
+  color: #f7e9d9;
+}
+
+/* Tặng Dép: allow cutouts beyond the outer panel as well as the arena. */
+.mole-play-panel {overflow:visible;}
+.mole-character img {pointer-events:auto;}
+.mole-bomb-overlay,.mole-legend-bomb i,.mole-hit-feedback.bomb .ui-icon {color:#ff353f;}
+.mole-bomb-overlay .ui-icon circle,.mole-legend-bomb .ui-icon circle {fill:#ef2838;stroke:#8b1020;}
+.mole-legend-bomb i {background:#fff0d8;}
+
+.mole-visual-legend {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:1fr;
+  width:min(100%,680px);
+}
+.mole-visual-legend > span {
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  grid-template-rows:auto auto;
+  align-content:center;
+  gap:2px 8px;
+  padding:8px 10px;
+  min-width:0;
+}
+.mole-visual-legend > span > img, .mole-visual-legend .mole-legend-bomb {
+  grid-row:1 / 3;
+  width:42px;
+  height:42px;
+}
+.mole-visual-legend .mole-delta {display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+.mole-delta img {width:20px;height:20px;object-fit:contain;}
+.mole-visual-legend small {grid-column:2 / -1;font-size:inherit;}
+@media (max-width:600px) {
+  .mole-visual-legend {grid-template-columns:minmax(0,1fr);max-width:26rem;}
+}
+@media (hover:none), (pointer:coarse) {
+  .mole-arena, .mole-arena * {-webkit-tap-highlight-color:transparent; user-select:none;}
+  .mole-arena button:active .mole-character, .mole-arena .mole-character.is-bomb img {filter:none;}
+}

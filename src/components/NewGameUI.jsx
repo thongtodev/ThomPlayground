@@ -1,0 +1,8 @@
+import React from 'react';
+import Icon from '../Icon';
+
+function Intro({game,onHome,onStart,children,startDisabled=false,images={}}){return <main className="game-intro new-game-intro"><button className="back-link" onClick={onHome}>Tất cả trò chơi</button><section className="intro-card"><div className="intro-icon">{images[`icon-${game.id}`]?<img src={images[`icon-${game.id}`]} alt=""/>:<Icon name={game.icon} size={44}/>}</div><span className="eyebrow">{game.en} · THƠM PLAYGROUND</span><h1>{game.name}</h1><p>{game.desc}</p>{children}<button className="primary-button start-button" disabled={startDisabled} onClick={onStart}><Icon name="play" size={17}/> Bắt đầu chơi</button></section></main>;}
+
+function Frame({game,onHome,onReset,onRestart,stats,controls,children}){return <main className="game-page new-game-page"><button className="back-link" onClick={onHome}>Trang chủ</button><header className="game-heading"><div><span className="eyebrow">{game.en}</span><h1>{game.name}</h1></div>{controls&&<div className="game-heading-actions">{controls}</div>}</header>{stats&&<div className="stats-row">{stats.map((s,i)=><div className="stat-box" key={i}><small>{s.label}</small><strong>{s.value}</strong></div>)}</div>}<section className="play-panel new-game-panel">{children}</section><div className="below-controls"><button className="secondary-button" onClick={()=>onRestart?onRestart(onReset):onReset?.()}><Icon name="reset" size={16}/> Chơi lại</button><button className="text-button" onClick={onHome}>Chọn game khác</button></div></main>;}
+
+export { Intro, Frame };

@@ -1,0 +1,16 @@
+/* Ordered imports preserve the existing cascade. See ARCHITECTURE.md. */
+@import './styles/01-base.css';
+@import './styles/02-assets-and-admin.css';
+@import './styles/03-shared-components.css';
+@import './styles/04-classic-games.css';
+@import './styles/05-home-and-onet.css';
+@import './styles/06-albums.css';
+@import './styles/07-collections-and-leaderboards.css';
+@import './styles/08-additional-games.css';
+@import './styles/09-feedback-and-radio.css';
+@import './styles/10-image-and-result-dialogs.css';
+@import './styles/11-admin-image-management.css';
+
+@import './styles/12-miner.css';
+
+@import './styles/13-uno.css';

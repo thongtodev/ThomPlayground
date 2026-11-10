@@ -1,0 +1,866 @@
+[
+  {
+    "id": "red_0",
+    "color": "red",
+    "value": "0",
+    "type": "number",
+    "image": "/assets/uno/RED/red_0.svg",
+    "name": "Red 0"
+  },
+  {
+    "id": "red_1_a",
+    "color": "red",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/RED/red_1_a.svg",
+    "name": "Red 1"
+  },
+  {
+    "id": "red_1_b",
+    "color": "red",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/RED/red_1_b.svg",
+    "name": "Red 1"
+  },
+  {
+    "id": "red_2_a",
+    "color": "red",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/RED/red_2_a.svg",
+    "name": "Red 2"
+  },
+  {
+    "id": "red_2_b",
+    "color": "red",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/RED/red_2_b.svg",
+    "name": "Red 2"
+  },
+  {
+    "id": "red_3_a",
+    "color": "red",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/RED/red_3_a.svg",
+    "name": "Red 3"
+  },
+  {
+    "id": "red_3_b",
+    "color": "red",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/RED/red_3_b.svg",
+    "name": "Red 3"
+  },
+  {
+    "id": "red_4_a",
+    "color": "red",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/RED/red_4_a.svg",
+    "name": "Red 4"
+  },
+  {
+    "id": "red_4_b",
+    "color": "red",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/RED/red_4_b.svg",
+    "name": "Red 4"
+  },
+  {
+    "id": "red_5_a",
+    "color": "red",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/RED/red_5_a.svg",
+    "name": "Red 5"
+  },
+  {
+    "id": "red_5_b",
+    "color": "red",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/RED/red_5_b.svg",
+    "name": "Red 5"
+  },
+  {
+    "id": "red_6_a",
+    "color": "red",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/RED/red_6_a.svg",
+    "name": "Red 6"
+  },
+  {
+    "id": "red_6_b",
+    "color": "red",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/RED/red_6_b.svg",
+    "name": "Red 6"
+  },
+  {
+    "id": "red_7_a",
+    "color": "red",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/RED/red_7_a.svg",
+    "name": "Red 7"
+  },
+  {
+    "id": "red_7_b",
+    "color": "red",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/RED/red_7_b.svg",
+    "name": "Red 7"
+  },
+  {
+    "id": "red_8_a",
+    "color": "red",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/RED/red_8_a.svg",
+    "name": "Red 8"
+  },
+  {
+    "id": "red_8_b",
+    "color": "red",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/RED/red_8_b.svg",
+    "name": "Red 8"
+  },
+  {
+    "id": "red_9_a",
+    "color": "red",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/RED/red_9_a.svg",
+    "name": "Red 9"
+  },
+  {
+    "id": "red_9_b",
+    "color": "red",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/RED/red_9_b.svg",
+    "name": "Red 9"
+  },
+  {
+    "id": "red_draw2_a",
+    "color": "red",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/RED/red_draw2_a.svg",
+    "name": "Red Draw Two"
+  },
+  {
+    "id": "red_draw2_b",
+    "color": "red",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/RED/red_draw2_b.svg",
+    "name": "Red Draw Two"
+  },
+  {
+    "id": "red_reverse_a",
+    "color": "red",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/RED/red_reverse_a.svg",
+    "name": "Red Reverse"
+  },
+  {
+    "id": "red_reverse_b",
+    "color": "red",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/RED/red_reverse_b.svg",
+    "name": "Red Reverse"
+  },
+  {
+    "id": "red_skip_a",
+    "color": "red",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/RED/red_skip_a.svg",
+    "name": "Red Skip"
+  },
+  {
+    "id": "red_skip_b",
+    "color": "red",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/RED/red_skip_b.svg",
+    "name": "Red Skip"
+  },
+  {
+    "id": "blue_0",
+    "color": "blue",
+    "value": "0",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_0.svg",
+    "name": "Blue 0"
+  },
+  {
+    "id": "blue_1_a",
+    "color": "blue",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_1_a.svg",
+    "name": "Blue 1"
+  },
+  {
+    "id": "blue_1_b",
+    "color": "blue",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_1_b.svg",
+    "name": "Blue 1"
+  },
+  {
+    "id": "blue_2_a",
+    "color": "blue",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_2_a.svg",
+    "name": "Blue 2"
+  },
+  {
+    "id": "blue_2_b",
+    "color": "blue",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_2_b.svg",
+    "name": "Blue 2"
+  },
+  {
+    "id": "blue_3_a",
+    "color": "blue",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_3_a.svg",
+    "name": "Blue 3"
+  },
+  {
+    "id": "blue_3_b",
+    "color": "blue",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_3_b.svg",
+    "name": "Blue 3"
+  },
+  {
+    "id": "blue_4_a",
+    "color": "blue",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_4_a.svg",
+    "name": "Blue 4"
+  },
+  {
+    "id": "blue_4_b",
+    "color": "blue",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_4_b.svg",
+    "name": "Blue 4"
+  },
+  {
+    "id": "blue_5_a",
+    "color": "blue",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_5_a.svg",
+    "name": "Blue 5"
+  },
+  {
+    "id": "blue_5_b",
+    "color": "blue",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_5_b.svg",
+    "name": "Blue 5"
+  },
+  {
+    "id": "blue_6_a",
+    "color": "blue",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_6_a.svg",
+    "name": "Blue 6"
+  },
+  {
+    "id": "blue_6_b",
+    "color": "blue",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_6_b.svg",
+    "name": "Blue 6"
+  },
+  {
+    "id": "blue_7_a",
+    "color": "blue",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_7_a.svg",
+    "name": "Blue 7"
+  },
+  {
+    "id": "blue_7_b",
+    "color": "blue",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_7_b.svg",
+    "name": "Blue 7"
+  },
+  {
+    "id": "blue_8_a",
+    "color": "blue",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_8_a.svg",
+    "name": "Blue 8"
+  },
+  {
+    "id": "blue_8_b",
+    "color": "blue",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_8_b.svg",
+    "name": "Blue 8"
+  },
+  {
+    "id": "blue_9_a",
+    "color": "blue",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_9_a.svg",
+    "name": "Blue 9"
+  },
+  {
+    "id": "blue_9_b",
+    "color": "blue",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/BLUE/blue_9_b.svg",
+    "name": "Blue 9"
+  },
+  {
+    "id": "blue_draw2_a",
+    "color": "blue",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/BLUE/blue_draw2_a.svg",
+    "name": "Blue Draw Two"
+  },
+  {
+    "id": "blue_draw2_b",
+    "color": "blue",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/BLUE/blue_draw2_b.svg",
+    "name": "Blue Draw Two"
+  },
+  {
+    "id": "blue_reverse_a",
+    "color": "blue",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/BLUE/blue_reverse_a.svg",
+    "name": "Blue Reverse"
+  },
+  {
+    "id": "blue_reverse_b",
+    "color": "blue",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/BLUE/blue_reverse_b.svg",
+    "name": "Blue Reverse"
+  },
+  {
+    "id": "blue_skip_a",
+    "color": "blue",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/BLUE/blue_skip_a.svg",
+    "name": "Blue Skip"
+  },
+  {
+    "id": "blue_skip_b",
+    "color": "blue",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/BLUE/blue_skip_b.svg",
+    "name": "Blue Skip"
+  },
+  {
+    "id": "green_0",
+    "color": "green",
+    "value": "0",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_0.svg",
+    "name": "Green 0"
+  },
+  {
+    "id": "green_1_a",
+    "color": "green",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_1_a.svg",
+    "name": "Green 1"
+  },
+  {
+    "id": "green_1_b",
+    "color": "green",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_1_b.svg",
+    "name": "Green 1"
+  },
+  {
+    "id": "green_2_a",
+    "color": "green",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_2_a.svg",
+    "name": "Green 2"
+  },
+  {
+    "id": "green_2_b",
+    "color": "green",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_2_b.svg",
+    "name": "Green 2"
+  },
+  {
+    "id": "green_3_a",
+    "color": "green",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_3_a.svg",
+    "name": "Green 3"
+  },
+  {
+    "id": "green_3_b",
+    "color": "green",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_3_b.svg",
+    "name": "Green 3"
+  },
+  {
+    "id": "green_4_a",
+    "color": "green",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_4_a.svg",
+    "name": "Green 4"
+  },
+  {
+    "id": "green_4_b",
+    "color": "green",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_4_b.svg",
+    "name": "Green 4"
+  },
+  {
+    "id": "green_5_a",
+    "color": "green",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_5_a.svg",
+    "name": "Green 5"
+  },
+  {
+    "id": "green_5_b",
+    "color": "green",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_5_b.svg",
+    "name": "Green 5"
+  },
+  {
+    "id": "green_6_a",
+    "color": "green",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_6_a.svg",
+    "name": "Green 6"
+  },
+  {
+    "id": "green_6_b",
+    "color": "green",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_6_b.svg",
+    "name": "Green 6"
+  },
+  {
+    "id": "green_7_a",
+    "color": "green",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_7_a.svg",
+    "name": "Green 7"
+  },
+  {
+    "id": "green_7_b",
+    "color": "green",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_7_b.svg",
+    "name": "Green 7"
+  },
+  {
+    "id": "green_8_a",
+    "color": "green",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_8_a.svg",
+    "name": "Green 8"
+  },
+  {
+    "id": "green_8_b",
+    "color": "green",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_8_b.svg",
+    "name": "Green 8"
+  },
+  {
+    "id": "green_9_a",
+    "color": "green",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_9_a.svg",
+    "name": "Green 9"
+  },
+  {
+    "id": "green_9_b",
+    "color": "green",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/GREEN/green_9_b.svg",
+    "name": "Green 9"
+  },
+  {
+    "id": "green_draw2_a",
+    "color": "green",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/GREEN/green_draw2_a.svg",
+    "name": "Green Draw Two"
+  },
+  {
+    "id": "green_draw2_b",
+    "color": "green",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/GREEN/green_draw2_b.svg",
+    "name": "Green Draw Two"
+  },
+  {
+    "id": "green_reverse_a",
+    "color": "green",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/GREEN/green_reverse_a.svg",
+    "name": "Green Reverse"
+  },
+  {
+    "id": "green_reverse_b",
+    "color": "green",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/GREEN/green_reverse_b.svg",
+    "name": "Green Reverse"
+  },
+  {
+    "id": "green_skip_a",
+    "color": "green",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/GREEN/green_skip_a.svg",
+    "name": "Green Skip"
+  },
+  {
+    "id": "green_skip_b",
+    "color": "green",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/GREEN/green_skip_b.svg",
+    "name": "Green Skip"
+  },
+  {
+    "id": "yellow_0",
+    "color": "yellow",
+    "value": "0",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_0.svg",
+    "name": "Yellow 0"
+  },
+  {
+    "id": "yellow_1_a",
+    "color": "yellow",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_1_a.svg",
+    "name": "Yellow 1"
+  },
+  {
+    "id": "yellow_1_b",
+    "color": "yellow",
+    "value": "1",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_1_b.svg",
+    "name": "Yellow 1"
+  },
+  {
+    "id": "yellow_2_a",
+    "color": "yellow",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_2_a.svg",
+    "name": "Yellow 2"
+  },
+  {
+    "id": "yellow_2_b",
+    "color": "yellow",
+    "value": "2",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_2_b.svg",
+    "name": "Yellow 2"
+  },
+  {
+    "id": "yellow_3_a",
+    "color": "yellow",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_3_a.svg",
+    "name": "Yellow 3"
+  },
+  {
+    "id": "yellow_3_b",
+    "color": "yellow",
+    "value": "3",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_3_b.svg",
+    "name": "Yellow 3"
+  },
+  {
+    "id": "yellow_4_a",
+    "color": "yellow",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_4_a.svg",
+    "name": "Yellow 4"
+  },
+  {
+    "id": "yellow_4_b",
+    "color": "yellow",
+    "value": "4",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_4_b.svg",
+    "name": "Yellow 4"
+  },
+  {
+    "id": "yellow_5_a",
+    "color": "yellow",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_5_a.svg",
+    "name": "Yellow 5"
+  },
+  {
+    "id": "yellow_5_b",
+    "color": "yellow",
+    "value": "5",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_5_b.svg",
+    "name": "Yellow 5"
+  },
+  {
+    "id": "yellow_6_a",
+    "color": "yellow",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_6_a.svg",
+    "name": "Yellow 6"
+  },
+  {
+    "id": "yellow_6_b",
+    "color": "yellow",
+    "value": "6",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_6_b.svg",
+    "name": "Yellow 6"
+  },
+  {
+    "id": "yellow_7_a",
+    "color": "yellow",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_7_a.svg",
+    "name": "Yellow 7"
+  },
+  {
+    "id": "yellow_7_b",
+    "color": "yellow",
+    "value": "7",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_7_b.svg",
+    "name": "Yellow 7"
+  },
+  {
+    "id": "yellow_8_a",
+    "color": "yellow",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_8_a.svg",
+    "name": "Yellow 8"
+  },
+  {
+    "id": "yellow_8_b",
+    "color": "yellow",
+    "value": "8",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_8_b.svg",
+    "name": "Yellow 8"
+  },
+  {
+    "id": "yellow_9_a",
+    "color": "yellow",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_9_a.svg",
+    "name": "Yellow 9"
+  },
+  {
+    "id": "yellow_9_b",
+    "color": "yellow",
+    "value": "9",
+    "type": "number",
+    "image": "/assets/uno/YELLOW/yellow_9_b.svg",
+    "name": "Yellow 9"
+  },
+  {
+    "id": "yellow_draw2_a",
+    "color": "yellow",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/YELLOW/yellow_draw2_a.svg",
+    "name": "Yellow Draw Two"
+  },
+  {
+    "id": "yellow_draw2_b",
+    "color": "yellow",
+    "value": "draw2",
+    "type": "draw_two",
+    "image": "/assets/uno/YELLOW/yellow_draw2_b.svg",
+    "name": "Yellow Draw Two"
+  },
+  {
+    "id": "yellow_reverse_a",
+    "color": "yellow",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/YELLOW/yellow_reverse_a.svg",
+    "name": "Yellow Reverse"
+  },
+  {
+    "id": "yellow_reverse_b",
+    "color": "yellow",
+    "value": "reverse",
+    "type": "reverse",
+    "image": "/assets/uno/YELLOW/yellow_reverse_b.svg",
+    "name": "Yellow Reverse"
+  },
+  {
+    "id": "yellow_skip_a",
+    "color": "yellow",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/YELLOW/yellow_skip_a.svg",
+    "name": "Yellow Skip"
+  },
+  {
+    "id": "yellow_skip_b",
+    "color": "yellow",
+    "value": "skip",
+    "type": "skip",
+    "image": "/assets/uno/YELLOW/yellow_skip_b.svg",
+    "name": "Yellow Skip"
+  },
+  {
+    "id": "wild_01",
+    "color": "wild",
+    "value": "wild",
+    "type": "wild",
+    "image": "/assets/uno/WILD/wild_01.svg",
+    "name": "Wild"
+  },
+  {
+    "id": "wild_02",
+    "color": "wild",
+    "value": "wild",
+    "type": "wild",
+    "image": "/assets/uno/WILD/wild_02.svg",
+    "name": "Wild"
+  },
+  {
+    "id": "wild_03",
+    "color": "wild",
+    "value": "wild",
+    "type": "wild",
+    "image": "/assets/uno/WILD/wild_03.svg",
+    "name": "Wild"
+  },
+  {
+    "id": "wild_04",
+    "color": "wild",
+    "value": "wild",
+    "type": "wild",
+    "image": "/assets/uno/WILD/wild_04.svg",
+    "name": "Wild"
+  },
+  {
+    "id": "wild_draw4_01",
+    "color": "wild",
+    "value": "wild_draw4",
+    "type": "wild_draw_four",
+    "image": "/assets/uno/WILD/wild_draw4_01.svg",
+    "name": "Wild Draw Four"
+  },
+  {
+    "id": "wild_draw4_02",
+    "color": "wild",
+    "value": "wild_draw4",
+    "type": "wild_draw_four",
+    "image": "/assets/uno/WILD/wild_draw4_02.svg",
+    "name": "Wild Draw Four"
+  },
+  {
+    "id": "wild_draw4_03",
+    "color": "wild",
+    "value": "wild_draw4",
+    "type": "wild_draw_four",
+    "image": "/assets/uno/WILD/wild_draw4_03.svg",
+    "name": "Wild Draw Four"
+  },
+  {
+    "id": "wild_draw4_04",
+    "color": "wild",
+    "value": "wild_draw4",
+    "type": "wild_draw_four",
+    "image": "/assets/uno/WILD/wild_draw4_04.svg",
+    "name": "Wild Draw Four"
+  }
+]

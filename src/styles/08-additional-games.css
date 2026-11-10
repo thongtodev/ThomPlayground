@@ -1,0 +1,1008 @@
+/* v1.33 · New mobile-first games */
+
+.new-game-intro .intro-card {
+  width: min(920px,100%);
+}
+
+.new-game-settings,.jigsaw-intro-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.new-game-settings label,.jigsaw-intro-settings label,.new-game-select {
+  display: grid;
+  gap: 7px;
+  text-align: left;
+  color: #51435b;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.new-game-settings select,.jigsaw-intro-settings select,.new-game-select select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #d9c8df;
+  border-radius: 12px;
+  background: #fff;
+  color: #2a1b36;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.new-game-rules {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  text-align: left;
+}
+
+.new-game-rules span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: #f7f0f8;
+  color: #4e3c59;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.new-game-rules .ui-icon {
+  color: #873d78;
+  flex: none;
+}
+
+.new-game-page .new-game-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.connect4-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 5px auto 16px;
+  color: #f5eafa;
+}
+
+.connect4-disc-mini {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid #fff8;
+}
+
+.connect4-disc-mini.red {
+  background: #e95b68;
+}
+
+.connect4-disc-mini.yellow {
+  background: #f3c64e;
+}
+
+.connect4-board-wrap {
+  width: min(100%,620px);
+  margin: 0 auto;
+  padding: clamp(8px,2vw,15px);
+  border-radius: 22px;
+  background: linear-gradient(145deg,#315cbd,#203e91);
+  box-shadow: 0 12px 28px #08051d40;
+}
+
+.connect4-drop-row {
+  display: grid;
+  grid-template-columns: repeat(7,minmax(0,1fr));
+  gap: clamp(4px,1vw,9px);
+  margin-bottom: 8px;
+}
+
+.connect4-drop-button {
+  min-width: 0;
+  min-height: 38px;
+  border: 1px solid #ffffff45;
+  border-radius: 9px;
+  background: #ffffff19;
+  color: #fff;
+  font-size: clamp(9px,2.5vw,12px);
+  font-weight: 850;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.connect4-drop-button:disabled {
+  opacity: .25;
+  cursor: default;
+}
+
+.connect4-board {
+  display: grid;
+  grid-template-columns: repeat(7,minmax(0,1fr));
+  gap: clamp(4px,1vw,9px);
+}
+
+.connect4-cell {
+  aspect-ratio: 1;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #172e70;
+  box-shadow: inset 0 4px 8px #080d36a8,inset 0 -2px 3px #ffffff1c;
+}
+
+.connect4-token {
+  width: 88%;
+  height: 88%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  box-shadow: 0 3px 7px #07051e66;
+  background: #0c1b4b;
+}
+
+.connect4-token.red {
+  background: #e64f60;
+  border-color: #ffb0b4;
+}
+
+.connect4-token.yellow {
+  background: #f2c344;
+  border-color: #fff0a0;
+}
+
+.connect4-token img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.connect4-token b {
+  color: #fff;
+  font-size: clamp(11px,3vw,20px);
+  font-weight: 950;
+  text-shadow: 0 1px 3px #0008;
+}
+
+.connect4-cell.winning .connect4-token {
+  outline: 4px solid #fff;
+  outline-offset: 1px;
+  animation: connect-win .65s ease-in-out infinite alternate;
+}
+
+@keyframes connect-win {
+  from {
+    transform: scale(.94);
+  }
+  to {
+    transform: scale(1.04);
+  }
+}
+
+.connect4-hint,.jigsaw-touch-hint,.simon-hint {
+  text-align: center;
+  color: #cbbdd3;
+  font-size: 12px;
+  margin: 13px auto 2px;
+}
+
+.simon-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 4px auto 16px;
+  text-align: center;
+  color: #f8eefb;
+}
+
+.simon-status small {
+  color: #cbbdd3;
+  font-size: 12px;
+}
+
+.simon-pad {
+  width: min(100%,560px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: clamp(10px,2.5vw,16px);
+}
+
+.simon-pad-button {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  overflow: hidden;
+  border: 3px solid #ffffff55;
+  border-radius: 20px;
+  padding: 0;
+  background: #fff1;
+  box-shadow: 0 8px 18px #05020d35;
+  cursor: pointer;
+  transition: filter .12s,transform .12s,box-shadow .12s;
+  touch-action: manipulation;
+}
+
+.simon-pad-button:disabled {
+  cursor: default;
+  filter: saturate(.72) brightness(.72);
+}
+
+.simon-color-1 {
+  background: #f4cf79;
+  border-color: #f9df9e;
+}
+
+.simon-color-2 {
+  background: #82c9a0;
+  border-color: #b3e6c7;
+}
+
+.simon-color-3 {
+  background: #e88b9c;
+  border-color: #f5b9c4;
+}
+
+.simon-color-4 {
+  background: #8cb8e6;
+  border-color: #bad7f5;
+}
+
+.simon-pad-button.lit {
+  filter: brightness(1.55) saturate(1.25);
+  transform: scale(1.045);
+  outline: 4px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px #fff9,0 0 34px #fff9;
+  z-index: 2;
+}
+
+.simon-pad-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+}
+
+.simon-response-note {
+  margin: 10px 0 0;
+  color: #806e8b;
+  font-size: 12px;
+}
+
+.simon-result,.jigsaw-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 22px 8px;
+  color: #f8effa;
+}
+
+.simon-result-icon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff17;
+  color: #f6d58b;
+}
+
+.simon-result h2,.jigsaw-result h2 {
+  margin: 0;
+  font-size: clamp(21px,5vw,30px);
+}
+
+.simon-result p,.jigsaw-result p {
+  color: #cbbdd3;
+  font-size: 13px;
+}
+
+.jigsaw-intro-settings {
+  margin-top: 20px;
+}
+
+.jigsaw-selected-preview {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 8px 0 16px;
+  padding: 10px;
+  border-radius: 14px;
+  background: #f7f0f8;
+  color: #38263f;
+  text-align: left;
+}
+
+.jigsaw-selected-preview img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.jigsaw-selected-preview span {
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.jigsaw-no-album {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff2e4;
+  color: #86521e;
+  font-size: 13px;
+}
+
+.jigsaw-game-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: min(100%,650px);
+  margin: 0 auto 12px;
+  color: #f8effa;
+  font-size: 13px;
+}
+
+.jigsaw-game-toolbar span {
+  color: #cbbdd3;
+  font-size: 12px;
+}
+
+.jigsaw-board {
+  width: min(100%,min(82vw,650px));
+  margin: 0 auto;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--jigsaw-n),minmax(0,1fr));
+  grid-template-rows: repeat(var(--jigsaw-n),minmax(0,1fr));
+  gap: 2px;
+  padding: 5px;
+  border-radius: 13px;
+  background: #f5e6fa;
+  box-shadow: 0 10px 28px #07031650;
+  touch-action: manipulation;
+}
+
+.jigsaw-piece {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid #ffffff8a;
+  border-radius: 3px;
+  background-repeat: no-repeat;
+  background-color: #e8dbea;
+  cursor: grab;
+  touch-action: manipulation;
+  transition: filter .12s,outline .12s;
+}
+
+.jigsaw-piece:active {
+  cursor: grabbing;
+}
+
+.jigsaw-piece.correct {
+  border-color: #f7d27b;
+}
+
+.jigsaw-piece.selected {
+  outline: 4px solid #f5c95b;
+  outline-offset: -4px;
+  filter: brightness(1.15);
+  z-index: 1;
+}
+
+.jigsaw-easy-sample {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 12px;
+  color: #f4eaf7;
+  font-size: 12px;
+}
+
+.jigsaw-easy-sample img {
+  width: 66px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 9px;
+  border: 2px solid #ffffff60;
+}
+
+.jigsaw-result {
+  width: min(92vw,600px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+}
+
+.jigsaw-result>img {
+  border-radius: 14px;
+  border: 4px solid #f2d18c;
+  background: #fff;
+}
+
+.jigsaw-sample-modal>img {
+  width: min(78vw,440px);
+  margin: 12px auto;
+}
+
+@media (max-width:600px) {
+  .new-game-intro .intro-card {
+    padding: 22px 15px;
+  }
+  .new-game-settings,.jigsaw-intro-settings {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .new-game-rules span {
+    font-size: 12px;
+    padding: 10px;
+  }
+  .connect4-board-wrap {
+    padding: 7px;
+    border-radius: 14px;
+    gap: 4px;
+  }
+  .connect4-drop-button {
+    min-height: 34px;
+    border-radius: 7px;
+  }
+  .connect4-token {
+    border-width: 2px;
+  }
+  .simon-pad {
+    gap: 9px;
+  }
+  .simon-pad-button {
+    border-radius: 15px;
+  }
+  .jigsaw-board {
+    width: min(100%,88vw);
+    gap: 1px;
+    padding: 3px;
+  }
+  .jigsaw-game-toolbar {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .connect4-cell.winning .connect4-token {
+    animation: none;
+  }
+  .simon-pad-button,.jigsaw-piece {
+    transition: none;
+  }
+}
+
+.jigsaw-slot.empty-slot {
+  display: grid;
+  place-items: center;
+  border: 2px dashed #9e83a8;
+  background: #fff9;
+  cursor: default;
+}
+
+.jigsaw-slot.empty-slot span {
+  font-size: clamp(10px,2.5vw,17px);
+  font-weight: 800;
+  color: #876f91;
+}
+
+.jigsaw-tray-wrap {
+  width: min(100%,650px);
+  margin: 16px auto 0;
+  padding: 12px;
+  border: 1px solid #ffffff22;
+  border-radius: 14px;
+  background: #ffffff0b;
+}
+
+.jigsaw-tray-heading {
+  margin-bottom: 10px;
+  color: #f8effa;
+}
+
+.jigsaw-tray-heading small {
+  color: #cbbdd3;
+}
+
+.jigsaw-tray {
+  grid-template-columns: repeat(var(--jigsaw-n),minmax(0,1fr));
+  gap: clamp(3px,.8vw,7px);
+}
+
+.jigsaw-tray-piece {
+  aspect-ratio: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.jigsaw-tray-piece.selected {
+  outline: 4px solid #f5c95b;
+  outline-offset: 1px;
+  filter: brightness(1.2);
+  z-index: 2;
+}
+
+@media (max-width:600px) {
+  .jigsaw-tray-wrap {
+    padding: 8px;
+    margin-top: 12px;
+  }
+  .jigsaw-tray {
+    gap: 3px;
+  }
+  .jigsaw-tray-heading {
+    font-size: 12px;
+  }
+}
+
+.new-game-intro .intro-icon img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+/* v1.36 · Real interlocking jigsaw pieces with rotation and a movable tray */
+
+.jigsaw-real-board {
+  width: min(100%,min(82vw,650px));
+  margin: 0 auto;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--jigsaw-n),minmax(0,1fr));
+  grid-template-rows: repeat(var(--jigsaw-n),minmax(0,1fr));
+  gap: 0;
+  padding: 8px;
+  border-radius: 18px;
+  background: linear-gradient(145deg,#463653,#30243d);
+  box-shadow: 0 12px 30px #07031655;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.jigsaw-target-slot {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1;
+  overflow: visible;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  z-index: 0;
+  touch-action: manipulation;
+}
+
+.jigsaw-target-slot:not(.occupied) {
+  cursor: pointer;
+}
+
+.jigsaw-piece-svg {
+  position: absolute;
+  left: -20%;
+  top: -20%;
+  width: 140%;
+  height: 140%;
+  overflow: visible;
+  pointer-events: none;
+  transform: rotate(var(--piece-rotation,0deg));
+  transform-origin: 50% 50%;
+  transition: transform .16s ease,filter .16s ease;
+  filter: drop-shadow(0 2px 3px #09051270);
+}
+
+.jigsaw-piece-svg .jigsaw-piece-shape {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.jigsaw-piece-button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  z-index: 2;
+  touch-action: manipulation;
+  cursor: grab;
+}
+
+.jigsaw-piece-button:active {
+  cursor: grabbing;
+}
+
+.jigsaw-piece-button .jigsaw-piece-svg {
+  --piece-rotation: 0deg;
+}
+
+.jigsaw-piece-button.selected {
+  z-index: 8;
+}
+
+.jigsaw-piece-button.selected .jigsaw-piece-svg {
+  filter: drop-shadow(0 0 5px #ffe08a) drop-shadow(0 4px 5px #09051299);
+  transform: rotate(var(--piece-rotation,0deg)) scale(1.06);
+}
+
+.jigsaw-target-slot>.jigsaw-piece-button .jigsaw-piece-svg {
+  --piece-rotation: 0deg;
+  transform: rotate(var(--piece-angle,0deg));
+}
+
+.jigsaw-piece-button .jigsaw-piece-svg {
+  transform: rotate(var(--piece-angle,0deg));
+}
+
+.jigsaw-piece-button.selected .jigsaw-piece-svg {
+  transform: rotate(var(--piece-angle,0deg)) scale(1.06);
+}
+
+.jigsaw-tray-wrap {
+  width: min(100%,720px);
+  margin: 18px auto 0;
+  padding: 13px 14px 18px;
+  border: 1px solid #ffffff2b;
+  border-radius: 17px;
+  background: linear-gradient(150deg,#ffffff12,#ffffff07);
+  overflow: visible;
+}
+
+.jigsaw-tray-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: #fff4fb;
+  font-size: 13px;
+}
+
+.jigsaw-tray-heading small {
+  color: #d0c1d9;
+  font-size: 11px;
+}
+
+.jigsaw-tray {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+  gap: clamp(8px,1.8vw,17px);
+  align-items: center;
+  justify-items: center;
+  padding: 14px 5px 20px;
+  overflow: visible;
+}
+
+.jigsaw-tray.difficulty-easy {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  max-width: 540px;
+  margin: auto;
+}
+
+.jigsaw-tray-cell {
+  position: relative;
+  width: min(100%,112px);
+  aspect-ratio: 1;
+  overflow: visible;
+  z-index: 1;
+}
+
+.jigsaw-tray-cell:nth-child(3n+1) {
+  transform: translateY(3px) rotate(-1deg);
+}
+
+.jigsaw-tray-cell:nth-child(3n+2) {
+  transform: translateY(-3px) rotate(1deg);
+}
+
+.jigsaw-tray-cell:nth-child(4n) {
+  transform: translateY(5px);
+}
+
+.jigsaw-tray-cell .jigsaw-piece-button {
+  z-index: 2;
+}
+
+.jigsaw-tray-cell .jigsaw-piece-button.selected {
+  z-index: 9;
+}
+
+.jigsaw-piece-tools {
+  width: min(100%,720px);
+  margin: 13px auto 0;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #f4d27a66;
+  border-radius: 13px;
+  background: #f4d27a18;
+  color: #fff4d2;
+}
+
+.jigsaw-piece-tools>b {
+  margin-right: auto;
+  font-size: 12px;
+}
+
+.jigsaw-piece-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 11px;
+  border: 1px solid #ffffff40;
+  border-radius: 9px;
+  background: #ffffff14;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.jigsaw-piece-tools button:active {
+  transform: scale(.97);
+}
+
+.jigsaw-piece-tools .jigsaw-deselect {
+  background: transparent;
+  color: #d9cadd;
+}
+
+.jigsaw-touch-hint {
+  max-width: 650px;
+  line-height: 1.5;
+  color: #d3c5dc;
+}
+
+@media (max-width:600px) {
+  .jigsaw-real-board {
+    width: min(100%,90vw);
+    padding: 5px;
+    border-radius: 13px;
+  }
+  .jigsaw-tray-wrap {
+    padding: 9px 7px 13px;
+    margin-top: 13px;
+  }
+  .jigsaw-tray {
+    gap: 6px;
+    padding: 12px 2px 16px;
+  }
+  .jigsaw-tray-cell {
+    width: min(100%,76px);
+  }
+  .jigsaw-tray.difficulty-easy .jigsaw-tray-cell {
+    width: min(100%,92px);
+  }
+  .jigsaw-tray-heading {
+    font-size: 12px;
+    align-items: flex-start;
+  }
+  .jigsaw-tray-heading small {
+    max-width: 52%;
+    text-align: right;
+    line-height: 1.4;
+  }
+  .jigsaw-piece-tools {
+    gap: 6px;
+    padding: 9px;
+  }
+  .jigsaw-piece-tools>b {
+    width: 100%;
+    text-align: center;
+    margin: 0 0 2px;
+  }
+  .jigsaw-piece-tools button {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 7px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .jigsaw-piece-svg {
+    transition: none;
+  }
+}
+
+@media (min-width:601px) {
+  .jigsaw-tray {
+    gap: clamp(18px,3vw,30px);
+  }
+  .jigsaw-tray-cell {
+    width: min(100%,86px);
+  }
+}
+
+@media (max-width:600px) {
+  .jigsaw-tray {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: clamp(17px,5vw,23px);
+  }
+  .jigsaw-tray.difficulty-easy {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: clamp(18px,5vw,25px);
+  }
+  .jigsaw-tray-cell {
+    width: min(100%,62px);
+  }
+  .jigsaw-tray.difficulty-easy .jigsaw-tray-cell {
+    width: min(100%,78px);
+  }
+}
+
+/* v1.38 · Keep the reference image fully inside its modal on every screen */
+
+.jigsaw-sample-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1200 !important;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.jigsaw-sample-modal {
+  width: min(92vw,560px);
+  max-width: 560px;
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: clamp(18px,3vw,28px);
+}
+
+.jigsaw-sample-modal>img {
+  display: block;
+  width: min(100%,440px);
+  max-width: 100%;
+  height: auto;
+  max-height: calc(100dvh - 190px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  margin: 12px auto 0;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.jigsaw-piece-tools>span {
+  color: #e7dced;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (max-width:600px) {
+  .jigsaw-sample-overlay {
+    padding: 12px;
+  }
+  .jigsaw-sample-modal {
+    width: min(94vw,520px);
+    max-height: calc(100dvh - 24px);
+    padding: 18px 14px;
+  }
+  .jigsaw-sample-modal>img {
+    width: 100%;
+    max-height: calc(100dvh - 190px);
+    margin-top: 10px;
+  }
+  .jigsaw-piece-tools {
+    justify-content: center;
+  }
+  .jigsaw-piece-tools>span {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.jigsaw-result>img {
+  width: min(100%,min(84vw,500px));
+  max-width: 100%;
+  max-height: calc(100dvh - 290px);
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  box-sizing: border-box;
+}
+
+.puzzle-win-result {
+  overflow: auto;
+}
+
+.puzzle-unlocked-full-image {
+  display: block;
+  width: min(100%,min(84vw,500px));
+  max-width: 100%;
+  max-height: calc(100dvh - 300px);
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  margin: 12px auto;
+  border: 3px solid #f2d18c;
+  border-radius: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.puzzle-collection-preview-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.puzzle-collection-preview-overlay .puzzle-collection-modal {
+  width: min(92vw,560px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.puzzle-collection-preview-overlay .puzzle-collection-modal>img {
+  display: block;
+  width: min(100%,520px);
+  max-width: 100%;
+  max-height: calc(100dvh - 220px);
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  margin: 12px auto;
+  box-sizing: border-box;
+}
+
+/* v1.40 · Reliable touch drag; tap rotates clockwise only */
+
+.jigsaw-piece-button {
+  touch-action: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.jigsaw-piece-button.touch-dragging {
+  opacity: .78;
+  filter: drop-shadow(0 8px 12px #09051299);
+  z-index: 20 !important;
+}
+
+.jigsaw-tray-cell,.jigsaw-target-slot {
+  touch-action: none;
+}
+.jigsaw-board-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,650px);margin:.75rem auto 0}
+.jigsaw-board-actions button{min-height:44px}
+.jigsaw-board-actions button:disabled{opacity:.45;cursor:default}
+.jigsaw-target-slot:has(.jigsaw-piece-button.selected){z-index:3;outline:3px solid #ffdc76;outline-offset:-3px}
+
+/* Touch devices: avoid rasterizing a shadow/filter for every clipped SVG. */
+@media (pointer:coarse), (max-width:600px) {
+ .jigsaw-piece-svg,.jigsaw-piece-button.selected .jigsaw-piece-svg,.jigsaw-piece-button.touch-dragging {filter:none;}
+ .jigsaw-piece-svg {transition:transform .12s ease;}
+ .jigsaw-piece-button.selected .jigsaw-piece-svg {transform:rotate(var(--piece-angle,0deg));}
+}
+@media (prefers-reduced-motion:reduce) {.jigsaw-piece-svg {transition:none;}}

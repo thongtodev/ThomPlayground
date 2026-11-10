@@ -1,0 +1,126 @@
+/* v1.42 · Clear red feedback for an incorrect Simon selection */
+
+.simon-pad-button.wrong {
+  position: relative;
+  border-color: #ff304f !important;
+  outline: 4px solid #ff304f;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px #ff304f88,0 0 34px #ff163f;
+  filter: brightness(1.12) saturate(1.35);
+  transform: scale(1.045);
+  z-index: 3;
+}
+
+.simon-pad-button.wrong::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #ff183b66;
+  pointer-events: none;
+  animation: simon-wrong-flash .45s ease-out both;
+}
+
+@keyframes simon-wrong-flash {
+  0%,100% {
+    opacity: .85;
+  }
+  45% {
+    opacity: .25;
+  }
+}
+
+/* v1.43 · Background radio playback with a compact persistent controller */
+
+.radio-player.compact {
+  width: min(340px,calc(100vw - 24px));
+}
+
+.radio-controls {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.radio-controls .radio-toggle {
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  gap: 9px;
+  text-align: left;
+}
+
+.radio-toggle span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio-toggle small {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: .78;
+}
+
+.radio-controls .radio-toggle b {
+  margin-left: 2px;
+}
+
+.radio-volume {
+  width: 48px;
+  flex: 0 0 48px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-left: 1px solid #24172c22;
+  background: #d9ad5e;
+  color: #21172b;
+  cursor: pointer;
+}
+
+.radio-volume:active {
+  filter: brightness(.92);
+}
+
+.radio-video.collapsed {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-video:not(.collapsed) {
+  height: auto;
+  padding: 10px;
+}
+
+.radio-video iframe {
+  display: block;
+  width: 100%;
+  height: 205px;
+  border: 0;
+  border-radius: 8px;
+  background: #000;
+}
+
+@media (max-width:500px) {
+  .radio-player.compact {
+    right: 10px;
+    bottom: max(10px,env(safe-area-inset-bottom));
+    width: min(320px,calc(100vw - 20px));
+  }
+  .radio-toggle {
+    padding: 10px 11px;
+    min-height: 44px;
+  }
+  .radio-toggle small {
+    font-size: 9px;
+  }
+  .radio-volume {
+    width: 44px;
+    flex-basis: 44px;
+  }
+}

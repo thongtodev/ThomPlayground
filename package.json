@@ -1,0 +1,21 @@
+{
+  "name": "thom-mini-game-hub",
+  "private": true,
+  "version": "1.61.3",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "vite": "5.4.14"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15"
+  }
+}

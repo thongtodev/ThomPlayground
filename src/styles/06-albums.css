@@ -1,0 +1,867 @@
+/* v1.20: display the built-in website avatar as the brand logo by default. */
+
+.brand-mark {
+  background: transparent;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-mark .site-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* v1.21: per-game image sets and precise square crop previews */
+
+.game-album-editor {
+  margin-bottom: 22px;
+}
+
+.game-album-subtitle {
+  font-size: 15px;
+  margin: 19px 0 10px;
+  color: #f9e4fa;
+}
+
+.game-album-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(94px,1fr));
+  gap: 10px;
+}
+
+.game-album-preview-onet {
+  grid-template-columns: repeat(6,minmax(0,1fr));
+  gap: 8px;
+}
+
+.game-album-preview-item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.game-album-tile {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #fff9f2;
+  border: 2px solid #725c7d;
+  border-radius: 9px;
+}
+
+.game-album-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-album-preview-item.is-default .game-album-tile {
+  opacity: .58;
+  border-style: dashed;
+}
+
+.game-album-fallback-number {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: #35213bdd;
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.game-album-preview-item small {
+  font-size: 11px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #e8d7ed;
+}
+
+.game-album-crop-button {
+  font: inherit;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.25;
+  padding: 5px 7px;
+  border: 1px solid #a48bac;
+  background: #493651;
+  border-radius: 7px;
+  color: #fff;
+  max-width: 100%;
+}
+
+.game-album-crop-button:disabled {
+  opacity: .5;
+}
+
+.game-album-tip {
+  font-size: 12px;
+  color: #d5bed9;
+  margin: 9px 0 15px;
+  line-height: 1.5;
+}
+
+.game-album-crop-overlay {
+  margin: 15px 0;
+  padding: 13px;
+  background: #24192d;
+  border: 1px solid #a083ad;
+  border-radius: 14px;
+}
+
+.game-album-crop-overlay .crop-editor {
+  margin-bottom: 12px;
+}
+
+@media (max-width:600px) {
+  .game-album-preview-onet {
+    gap: 4px;
+  }
+  .game-album-tile {
+    border-width: 1px;
+    border-radius: 5px;
+  }
+  .game-album-crop-button {
+    font-size: 9px;
+    padding: 4px 2px;
+  }
+  .game-album-preview-item small {
+    font-size: 9px;
+  }
+  .game-album-fallback-number {
+    font-size: 8px;
+  }
+}
+
+/* v1.22: the crop editor is a viewport modal instead of appearing after a long album. */
+
+.crop-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10,7,16,.83);
+  overscroll-behavior: contain;
+}
+
+.crop-modal-dialog {
+  width: min(760px,100%);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #27202f;
+  border: 1px solid #8b6f92;
+  border-radius: 18px;
+  box-shadow: 0 22px 90px rgba(0,0,0,.65);
+  outline: none;
+}
+
+.crop-modal-dialog .crop-editor {
+  margin: 0;
+  border: 0;
+  padding: 22px;
+  background: transparent;
+}
+
+.crop-modal-extra {
+  padding: 0 22px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.crop-modal-extra .game-album-tip {
+  margin: 0;
+  flex: 1;
+  min-width: 180px;
+}
+
+.game-album-crop-notice {
+  padding: 10px 13px;
+  border: 1px solid #a8d9c5;
+  border-radius: 10px;
+  color: #c7f5df !important;
+  background: #234138;
+  font-weight: 700;
+}
+
+@media (max-width:720px) {
+  .crop-modal-backdrop {
+    padding: 6px;
+    align-items: stretch;
+  }
+  .crop-modal-dialog {
+    max-height: calc(100dvh - 12px);
+    width: 100%;
+    border-radius: 14px;
+  }
+  .crop-modal-dialog .crop-editor {
+    padding: 14px;
+  }
+  .crop-modal-extra {
+    padding: 0 14px 16px;
+  }
+}
+
+/* v1.24 · Ghép Thơm Đi! compact level selector and masked collection */
+
+.puzzle-intro .puzzle-intro-card {
+  max-width: 980px;
+}
+
+.puzzle-difficulty-guide {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 0 0 18px;
+}
+
+.puzzle-difficulty-guide span {
+  background: #eee4f0;
+  border: 1px solid #dacbdf;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: #57455f;
+  font-size: 11px;
+}
+
+.puzzle-difficulty-guide b {
+  color: #382541;
+}
+
+.puzzle-level-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.puzzle-level-card {
+  min-width: 0;
+  padding: 11px;
+  background: #fffaf4;
+  border: 1px solid #e1d4ce;
+  border-radius: 15px;
+  box-shadow: 0 5px 16px #33233b0d;
+}
+
+.puzzle-level-art {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #eee5e8;
+  display: grid;
+  place-items: center;
+}
+
+.puzzle-level-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.puzzle-level-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 2px 8px;
+  color: #382a3d;
+}
+
+.puzzle-level-copy b {
+  font-family: 'Space Grotesk';
+  font-size: 14px;
+}
+
+.puzzle-level-copy small {
+  font-size: 10px;
+  color: #827587;
+  min-height: 14px;
+}
+
+.puzzle-level-actions {
+  gap: 7px;
+}
+
+.puzzle-difficulty-button {
+  min-width: 0;
+  min-height: 39px;
+  border: 1px solid #d7c7d7;
+  border-radius: 9px;
+  padding: 6px 5px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #392940;
+  background: #f4eaf3;
+}
+
+.puzzle-difficulty-button.easy {
+  background: #f7e5c9;
+  border-color: #e8c88d;
+}
+
+.puzzle-difficulty-button.hard {
+  background: #e9e1f2;
+  border-color: #c9b7db;
+}
+
+.puzzle-difficulty-button:disabled {
+  opacity: .48;
+  cursor: not-allowed;
+  filter: grayscale(.35);
+}
+
+.puzzle-empty-album {
+  padding: 12px 14px;
+  background: #f0e8f0;
+  border-radius: 10px;
+  color: #695c70 !important;
+  font-size: 11px !important;
+}
+
+.puzzle-collection-section {
+  margin: 0 0 34px;
+  padding: 22px;
+  border: 1px solid #5b4968;
+  border-radius: 20px;
+  background: #ffffff07;
+}
+
+.puzzle-collection-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 17px;
+}
+
+.puzzle-collection-heading h2 {
+  font-family: 'Space Grotesk';
+  font-size: 25px;
+  margin: 5px 0;
+}
+
+.puzzle-collection-heading p {
+  font-size: 12px;
+  color: #b9adbf;
+  margin: 0;
+}
+
+.puzzle-collection-heading>strong {
+  font-size: 12px;
+  color: #f4d27a;
+  white-space: nowrap;
+}
+
+.puzzle-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(125px,1fr));
+  gap: 12px;
+}
+
+.puzzle-collection-tile {
+  min-width: 0;
+  text-align: left;
+  border: 1px solid #594965;
+  border-radius: 13px;
+  background: #2d2438;
+  color: #f8f1f9;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.puzzle-collection-tile:disabled {
+  cursor: default;
+  opacity: .7;
+}
+
+.puzzle-collection-tile.unlocked {
+  border-color: #a78b55;
+}
+
+.puzzle-collection-art {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: #1d1726;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-size: 27px;
+}
+
+.puzzle-collection-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.puzzle-collection-tile>b {
+  font-size: 12px;
+}
+
+.puzzle-collection-tile>small {
+  font-size: 10px;
+  color: #c8b9d0;
+  min-height: 13px;
+}
+
+.puzzle-collection-modal {
+  max-height: calc(100dvh - 36px);
+  overflow: auto;
+}
+
+.puzzle-collection-modal>img {
+  display: block;
+  width: min(100%,520px);
+  max-height: 62dvh;
+  object-fit: contain;
+  margin: 12px auto;
+  border-radius: 12px;
+  background: #eee;
+}
+
+@media (max-width:760px) {
+  .puzzle-level-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+  }
+  .puzzle-intro .intro-card {
+    padding: 22px 17px;
+  }
+  .puzzle-level-card {
+    padding: 8px;
+  }
+  .puzzle-level-copy b {
+    font-size: 12px;
+  }
+  .puzzle-level-copy small {
+    font-size: 9px;
+  }
+  .puzzle-difficulty-button {
+    font-size: 9px;
+    min-height: 37px;
+  }
+  .puzzle-collection-section {
+    padding: 15px;
+  }
+  .puzzle-collection-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .puzzle-collection-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+}
+
+@media (max-width:380px) {
+  .puzzle-level-grid {
+    grid-template-columns: 1fr;
+  }
+  .puzzle-level-card {
+    display: grid;
+    grid-template-columns: 96px minmax(0,1fr);
+    column-gap: 10px;
+    align-items: center;
+  }
+  .puzzle-level-art {
+    grid-row: span 2;
+  }
+  .puzzle-level-copy {
+    padding: 3px 0;
+  }
+  .puzzle-level-actions {
+    grid-column: 2;
+  }
+  .puzzle-level-copy small {
+    white-space: normal;
+  }
+}
+
+/* Trạm Chạy Số appears once inside the homepage banner; the site header/favicon stay as Thơm. */
+
+@media (max-width:600px) {
+  .home-page {
+    padding: 10px 13px 10px;
+  }
+  .hero {
+    min-height: 0;
+    padding: 23px 20px 20px;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .hero-copy {
+    width: 100%;
+    max-width: none;
+  }
+  .hero h1 {
+    font-size: clamp(35px,9.2vw,46px);
+    letter-spacing: -2.4px;
+    line-height: 1.02;
+    margin: 12px 0 10px;
+  }
+  .hero-copy>p {
+    font-size: 12px;
+    line-height: 1.55;
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+  .hero-foot {
+    gap: 8px 11px;
+    margin-top: 14px;
+    font-size: 8px;
+  }
+  .hero-image {
+    position: static;
+    align-self: center;
+    width: min(100%,230px);
+    height: clamp(135px,43vw,185px);
+    margin: 0 auto;
+  }
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+}
+
+@media (max-width:374px) {
+  .hero {
+    padding: 20px 17px 17px;
+  }
+  .hero h1 {
+    font-size: 36px;
+  }
+  .hero-image {
+    width: 100%;
+    height: 140px;
+  }
+}
+
+.puzzle-collection-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  min-height: 100dvh;
+}
+
+/* v1.24 · simplify puzzle level selection and show masked reward artwork */
+
+.puzzle-level-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-height: 92px;
+  padding: 14px 13px;
+}
+
+.puzzle-level-copy {
+  padding: 0 2px 2px;
+  min-height: 0;
+}
+
+.puzzle-level-copy b {
+  font-size: 15px;
+}
+
+.puzzle-level-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.puzzle-collection-art {
+  position: relative;
+  isolation: isolate;
+}
+
+.puzzle-collection-art>img {
+  transition: filter .2s ease,transform .2s ease;
+}
+
+.puzzle-collection-tile.locked .puzzle-collection-art>img {
+  filter: blur(5px) brightness(.48) saturate(.75);
+  transform: scale(1.08);
+}
+
+.puzzle-collection-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  text-align: center;
+  color: #fff;
+  background: #17111d55;
+  text-shadow: 0 1px 4px #0008;
+}
+
+.puzzle-collection-mask span {
+  font-size: 23px;
+  line-height: 1;
+}
+
+.puzzle-collection-mask b {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.puzzle-collection-placeholder {
+  color: #b9adbf;
+}
+
+.puzzle-collection-tile.locked {
+  cursor: default;
+}
+
+.puzzle-collection-tile.unlocked .puzzle-collection-art>img {
+  filter: none;
+  transform: none;
+}
+
+.hero-partner-mark {
+  display: flex;
+  align-items: center;
+  width: 112px;
+  height: 76px;
+  margin: 0 0 8px;
+}
+
+.hero-partner-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (max-width:600px) {
+  .hero-partner-mark {
+    width: 88px;
+    height: 62px;
+    margin-bottom: 5px;
+  }
+  .puzzle-level-card {
+    min-height: 84px;
+    padding: 10px;
+  }
+  .puzzle-level-copy b {
+    font-size: 13px;
+  }
+  .puzzle-difficulty-button {
+    min-height: 36px;
+  }
+  .puzzle-collection-mask b {
+    font-size: 9px;
+  }
+}
+
+@media (max-width:380px) {
+  .puzzle-level-card {
+    display: flex;
+    grid-template-columns: none;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .puzzle-level-actions {
+    grid-column: auto;
+  }
+}
+
+/* v1.25 — Mobile touch slipper is a brief, static visual at the finger position. */
+
+.mole-touch-slipper {
+  position: absolute;
+  z-index: 30;
+  width: clamp(42px,12vw,62px);
+  height: clamp(42px,12vw,62px);
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  filter: drop-shadow(0 3px 4px #0005);
+  animation: slipper-touch-appear .52s linear forwards;
+}
+
+@keyframes slipper-touch-appear {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.mole-hit-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.mole-hit-feedback img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.mole-hit-feedback.bomb {
+  color: #ffb8a2;
+}
+
+/* v1.25 — Achievement cards are grouped by their game. */
+
+.collection-achievement-groups {
+  display: grid;
+  gap: 30px;
+  margin-top: 28px;
+}
+
+.collection-achievement-group {
+  min-width: 0;
+}
+
+.collection-achievement-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 14px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.collection-achievement-heading h2 {
+  font-family: 'Space Grotesk',sans-serif;
+  font-size: clamp(18px,2.5vw,24px);
+  margin: 0;
+  flex: 1;
+}
+
+.collection-achievement-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #ffffff12;
+  font-size: 21px;
+}
+
+.collection-achievement-heading small {
+  color: #f4d27a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.collection-achievement-group .collection-grid {
+  margin: 0;
+}
+
+@media (max-width:600px) {
+  .mole-touch-slipper {
+    width: 48px;
+    height: 48px;
+  }
+  .collection-achievement-groups {
+    gap: 24px;
+  }
+  .collection-achievement-heading {
+    margin-bottom: 10px;
+  }
+}
+
+.mole-visual-legend>span>img.mole-reward-slipper {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  object-fit: contain;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* v1.27 · Homepage headline without partner logo. */
+
+.hero-title-row {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 18px;
+}
+
+.hero-title-row h1 {
+  min-width: 0;
+  margin: 0;
+  font-size: clamp(42px,4.8vw,61px);
+  letter-spacing: -3px;
+  line-height: .99;
+}
+
+@media (max-width:850px) {
+  .hero-title-row {
+    margin-bottom: 15px;
+  }
+  .hero-title-row h1 {
+    font-size: clamp(38px,5.4vw,50px);
+    letter-spacing: -2.4px;
+  }
+}
+
+@media (max-width:600px) {
+  .hero-title-row {
+    margin: 0 0 13px;
+  }
+  .hero-title-row h1 {
+    font-size: clamp(29px,8.6vw,39px);
+    letter-spacing: -1.8px;
+    line-height: 1.04;
+  }
+}
+
+@media (max-width:374px) {
+  .hero-title-row h1 {
+    font-size: clamp(27px,8.8vw,31px);
+    letter-spacing: -1.4px;
+  }
+}
+
+.game-album-section {margin:12px 0;border:1px solid #52465f;border-radius:14px;background:#261e32;padding:12px;}
+.game-album-section h2 {margin:0;}
+.game-album-section h2 button {display:flex;align-items:center;gap:12px;width:100%;min-height:48px;background:transparent;color:inherit;border:0;text-align:left;font:inherit;font-size:clamp(16px,2vw,21px);scroll-margin-top:90px;}
+.game-album-section h2 button small {margin-left:auto;font-size:13px;white-space:nowrap;}
+.game-album-section [aria-expanded=true] {margin-bottom:10px;}
+.game-albums-page:has(.game-album-section:target) {padding-bottom:65vh;}
+@media(max-width:400px){.topbar .top-actions{gap:2px}.topbar .nav-home,.topbar .icon-button{width:32px;min-width:32px;padding:5px}}
