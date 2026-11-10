@@ -11,6 +11,10 @@ test('UNO authoritative room, rules, privacy and reconnect contracts',async t=>{
  await db.exec(migration);await db.exec(migration);
  await db.exec(readFileSync(new URL('../migration-1.61.3.sql',import.meta.url),'utf8'));
  await db.exec(readFileSync(new URL('../migration-1.61.3.sql',import.meta.url),'utf8'));
+ await db.exec(readFileSync(new URL('../migration-1.61.5.sql',import.meta.url),'utf8'));
+ await db.exec(readFileSync(new URL('../migration-1.61.5.sql',import.meta.url),'utf8'));
+ await db.exec(readFileSync(new URL('../migration-1.61.7.sql',import.meta.url),'utf8'));
+ await db.exec(readFileSync(new URL('../migration-1.61.7.sql',import.meta.url),'utf8'));
  const actor=async id=>db.query("select set_config('test.uid',$1,false)",[id]);
  const rpc=async (action,code='',args={},version=null)=>{const {rows}=await db.query('select public.uno_room($1,$2,$3,$4,gen_random_uuid()) s',[action,code,JSON.stringify(args),version]);return rows[0].s;};
  const step=async(s,p,action,args={})=>(await db.query('select uno_private.step($1,$2,$3,$4) s',[JSON.stringify(s),p,action,JSON.stringify(args)])).rows[0].s;
@@ -21,7 +25,7 @@ test('UNO authoritative room, rules, privacy and reconnect contracts',async t=>{
   await actor(ids[0]);room=await rpc('create','',{name:'A',capacity:4});assert.equal(room.me,ids[0]);
   for(let i=1;i<4;i++){await actor(ids[i]);room=await rpc('join',room.code,{name:'P'+i});room=await rpc('ready',room.code,{ready:true},room.version);}
   await actor(ids[0]);room=await rpc('snapshot',room.code);room=await rpc('start',room.code,{},room.version);
-  assert.equal(room.hand.length,7);assert.equal(room.players.length,4);assert.ok(cards.find(c=>c.id===room.top).value.match(/^\d$/));assert.equal(room.drawCount,79);
+  assert.equal(room.hand.length,7);assert.equal(room.order.length,4);assert.equal(new Set(room.order).size,4);assert.ok(room.order.includes(room.turn));assert.deepEqual(room.order,(await db.query("select state->'order' as seats from uno_private.rooms where code=$1",[room.code])).rows[0].seats);assert.equal(room.players.length,4);assert.ok(cards.find(c=>c.id===room.top).value.match(/^\d$/));assert.equal(room.drawCount,79);
   assert.equal(room.hands,undefined);assert.equal(room.deck,undefined);assert.equal(room.pending,null);assert.equal(room.legal.every(c=>room.hand.includes(c)),true);
   await actor('00000000-0000-4000-8000-000000000099');await assert.rejects(rpc('snapshot',room.code),/không thuộc/);
   await db.exec('set role authenticated');await assert.rejects(db.query('select * from uno_private.rooms'),/permission denied/);await db.exec('reset role');
@@ -61,6 +65,30 @@ test('UNO authoritative room, rules, privacy and reconnect contracts',async t=>{
    const all=[...s.deck,...s.discard,...Object.values(s.hands).flat()];assert.equal(all.length,108);assert.equal(new Set(all).size,108);
   }assert.equal(s.status,'finished',`${n} players`);assert.ok(s.winner);
  }
+ });
+ await t.test('server deadlines: expiry, duplicate requests, draw once, +4, clocks and privacy',async()=>{
+  const [a,b,c,d]=ids;
+  const seed=async x=>{await db.query('update uno_private.rooms set state=$1 where code=$2',[JSON.stringify(x),room.code]);await actor(b);};
+  const fresh=(extra={})=>state({[a]:['red_1_a','blue_2_a'],[b]:['green_2_a'],[c]:['yellow_2_a'],[d]:['blue_3_a']},extra);
+  const past='2000-01-01T00:00:00Z';
+  await seed(fresh());let snap=await rpc('snapshot',room.code);
+  assert.ok(Math.abs(Date.parse(snap.deadline)-Date.parse(snap.serverNow)-30000)<100);
+  const firstDeadline=snap.deadline;assert.equal((await rpc('snapshot',room.code)).deadline,firstDeadline);
+  await seed(fresh({deadline:past}));snap=await rpc('snapshot',room.code);
+  assert.equal(snap.turn,b);assert.equal(snap.players.find(p=>p.id===a).count,3);
+  const v=snap.version;snap=await rpc('snapshot',room.code);assert.equal(snap.version,v);assert.equal(snap.players.find(p=>p.id===a).count,3);
+  await seed(fresh({deadline:past,drew:true,drawn:'red_1_a'}));snap=await rpc('snapshot',room.code);assert.equal(snap.turn,b);assert.equal(snap.players.find(p=>p.id===a).count,2);
+  let pending=await step(state({[a]:['wild_draw4_01','green_1_a'],[b]:['blue_2_a'],[c]:['red_3_a'],[d]:['red_4_a']}),a,'play',{card:'wild_draw4_01',color:'green'});
+  await seed(pending);snap=await rpc('snapshot',room.code);assert.ok(Math.abs(Date.parse(snap.deadline)-Date.parse(snap.serverNow)-15000)<100);assert.equal(snap.pending.illegal,undefined);
+  await seed({...pending,deadline:past});snap=await rpc('challenge',room.code,{},snap.version);assert.equal(snap.pending,null);assert.equal(snap.turn,c);assert.equal(snap.hand.length,5);assert.match(snap.notice,/15 giây/);
+  await seed(fresh({deadline:past}));snap=await rpc('play',room.code,{card:'red_1_a'},-1);assert.equal(snap.turn,b);assert.equal(snap.players.find(p=>p.id===a).count,3);
+  const future=new Date(Date.now()+20000).toISOString();
+  await seed(fresh({deadline:future,deck:['red_7_a','blue_8_a']}));await actor(a);snap=await rpc('snapshot',room.code);snap=await rpc('draw',room.code,{},snap.version);assert.equal(Date.parse(snap.deadline),Date.parse(future));assert.equal(snap.turn,a);
+  await seed(state({[a]:['red_skip_a','blue_2_a'],[b]:['green_2_a']},{deadline:future}));await actor(a);snap=await rpc('snapshot',room.code);snap=await rpc('play',room.code,{card:'red_skip_a'},snap.version);assert.equal(snap.turn,a);assert.ok(Date.parse(snap.deadline)>Date.parse(future));
+  const deadline=snap.deadline;snap=await rpc('uno',room.code,{},snap.version);assert.equal(snap.deadline,deadline);
+  let last=await step(state({[a]:['wild_draw4_01'],[b]:['blue_2_a']}),a,'play',{card:'wild_draw4_01',color:'green'});
+  await seed({...last,deadline:past});snap=await rpc('snapshot',room.code);assert.equal(snap.status,'finished');assert.equal(snap.winner,a);assert.equal(snap.deadline,null);
+  await seed(fresh());
  });
  await t.test('reconnect retains hand; disconnected player forfeits and host transfers',async()=>{await actor(ids[1]);let snap=await rpc('snapshot',room.code);const hand=snap.hand;assert.deepEqual((await rpc('snapshot',room.code)).hand,hand);await db.query("update uno_private.rooms set players=jsonb_set(players,'{0,seen}',to_jsonb((now()-interval '100 seconds')::text)) where code=$1",[room.code]);snap=await rpc('snapshot',room.code);assert.equal(snap.players[0].left,true);assert.equal(snap.host,ids[1]);assert.equal(snap.players.filter(p=>!p.left).length,3);});
  }finally{await db.close();}

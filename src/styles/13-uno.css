@@ -37,3 +37,41 @@
 .uno-hand-area>p{font-size:12px;margin:4px 0}.uno-call-now{min-width:82px}
 }
 @media(prefers-reduced-motion:reduce){.uno-draw-flight{display:none}.uno-hand-card.just-drawn,.uno-call-now{animation:none}}
+
+/* Flat button surfaces in every interaction state. */
+.uno-page button,.uno-page button:hover,.uno-page button:active,.uno-page button:focus,.uno-admin button{box-shadow:none!important}
+.uno-page button:focus-visible{outline:2px solid #ffe39b;outline-offset:3px}
+.uno-draw-stack.needs-draw .uno-pile-button{outline:2px solid #ffe39b;outline-offset:4px}
+.uno-draw-stack.needs-draw>small{color:#ffe39b;font-weight:700}
+.uno-room-bar strong{margin-right:auto}
+
+.uno-turn-ring{max-width:460px;margin:0 auto 16px;cursor:default}
+.uno-turn-map{position:relative;height:160px;margin:0 auto}
+.uno-turn-map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.uno-turn-seat{position:absolute;transform:translate(-50%,-50%);width:30%;max-width:132px;border:1px solid #80758f;border-radius:12px;padding:6px;background:#282538;display:grid;gap:3px;box-sizing:border-box}
+.uno-turn-seat b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uno-turn-seat small{font-size:10px;color:#c8c0d2}
+.uno-turn-seat.current{border:2px solid #ffda82;background:#59482c}.uno-turn-seat.current small{color:#ffe6ac;font-weight:700}
+.uno-turn-seat.next{border:2px solid #8bd7b7}.uno-turn-seat.next small{color:#b6f0d3}
+.uno-turn-direction{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px;color:#b4a7c4}
+.uno-turn-summary{font-size:12px;line-height:1.5;margin:8px 0 0;overflow-wrap:anywhere}.uno-turn-summary span{display:block;color:#b6f0d3}
+.uno-turn-note{font-size:10px;color:#beb4cd}
+@media(max-width:600px){.uno-turn-map{height:145px}.uno-turn-seat{padding:5px 3px}.uno-turn-seat b{font-size:11px}.uno-turn-ring{margin-bottom:12px}}
+
+/* Short compositor-only effects: no canvas, blur or input-blocking overlay. */
+.uno-table{position:relative}
+.uno-event{position:absolute;inset:0;z-index:5;display:grid;place-items:center;pointer-events:none;padding:12px;animation:uno-event-life 2s both}
+.uno-event-burst{display:flex;flex-direction:column;align-items:center;gap:5px;width:max-content;max-width:100%;padding:18px 26px;border:3px solid #ffe3a0;border-radius:26px;background:#5b2449;color:#fff4d5;box-shadow:0 8px 0 #26162c;transform:rotate(-4deg);animation:uno-event-pop .38s ease-out both}
+.uno-event-burst strong{font-size:clamp(36px,9vw,64px);font-weight:950;line-height:1.1;color:#ffe185;text-shadow:2px 3px 0 #9d352f}
+.uno-event-name{font-size:14px;font-weight:800;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uno-event-caption{font-size:13px;font-weight:700;text-align:center}
+.uno-event-catch .uno-event-burst{background:#752c37;border-color:#ffb3a2;animation:uno-event-caught .42s ease-out both}
+.uno-event-catch strong{font-size:clamp(26px,6vw,42px);color:#fff0e7}
+@keyframes uno-event-pop{0%{transform:scale(.6) rotate(-10deg);opacity:0}65%{transform:scale(1.08) rotate(-2deg);opacity:1}100%{transform:scale(1) rotate(-4deg);opacity:1}}
+@keyframes uno-event-caught{0%{transform:translateX(0) scale(.85);opacity:0}25%{transform:translateX(-8px) rotate(-3deg);opacity:1}50%{transform:translateX(8px) rotate(3deg)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+@keyframes uno-event-life{0%,85%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.uno-event,.uno-event-burst,.uno-event-catch .uno-event-burst{animation:none;transform:none}}
+.uno-countdown{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px auto 12px;color:#fff2cf;font-size:13px}
+.uno-countdown b{font-variant-numeric:tabular-nums;font-size:22px;min-width:3ch;padding:3px 10px;border-radius:10px;background:#45354f}
+.uno-countdown small{flex-basis:100%;color:#d7c9df;font-size:11px}
+.uno-countdown.is-urgent b{background:#9b3447;color:#fff}

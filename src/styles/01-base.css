@@ -241,18 +241,18 @@ button:focus-visible,select:focus-visible {
   font-weight: 800;
   font-size: 14px;
   min-height: 48px;
-  box-shadow: 0 7px 0 #d65f4d;
+  box-shadow: none;
   transition: transform .15s,box-shadow .15s;
 }
 
 .primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 9px 0 #d65f4d;
+  box-shadow: none;
 }
 
 .primary-button:active {
   transform: translateY(3px);
-  box-shadow: 0 3px 0 #d65f4d;
+  box-shadow: none;
 }
 
 .primary-button span {
