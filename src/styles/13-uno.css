@@ -45,18 +45,10 @@
 .uno-draw-stack.needs-draw>small{color:#ffe39b;font-weight:700}
 .uno-room-bar strong{margin-right:auto}
 
-.uno-turn-ring{max-width:460px;margin:0 auto 16px;cursor:default}
-.uno-turn-map{position:relative;height:160px;margin:0 auto}
-.uno-turn-map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.uno-turn-seat{position:absolute;transform:translate(-50%,-50%);width:30%;max-width:132px;border:1px solid #80758f;border-radius:12px;padding:6px;background:#282538;display:grid;gap:3px;box-sizing:border-box}
-.uno-turn-seat b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.uno-turn-seat small{font-size:10px;color:#c8c0d2}
-.uno-turn-seat.current{border:2px solid #ffda82;background:#59482c}.uno-turn-seat.current small{color:#ffe6ac;font-weight:700}
-.uno-turn-seat.next{border:2px solid #8bd7b7}.uno-turn-seat.next small{color:#b6f0d3}
-.uno-turn-direction{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px;color:#b4a7c4}
-.uno-turn-summary{font-size:12px;line-height:1.5;margin:8px 0 0;overflow-wrap:anywhere}.uno-turn-summary span{display:block;color:#b6f0d3}
-.uno-turn-note{font-size:10px;color:#beb4cd}
-@media(max-width:600px){.uno-turn-map{height:145px}.uno-turn-seat{padding:5px 3px}.uno-turn-seat b{font-size:11px}.uno-turn-ring{margin-bottom:12px}}
+/* One compact line; long nicknames never widen the board. */
+.uno-turn-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;margin:0 0 10px;font-size:12px;line-height:24px;cursor:default}
+.uno-turn-direction{flex-shrink:0;color:#dfd5e8}
+.uno-turn-next{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b6f0d3;text-align:right}
 
 /* Short compositor-only effects: no canvas, blur or input-blocking overlay. */
 .uno-table{position:relative}
@@ -75,3 +67,19 @@
 .uno-countdown b{font-variant-numeric:tabular-nums;font-size:22px;min-width:3ch;padding:3px 10px;border-radius:10px;background:#45354f}
 .uno-countdown small{flex-basis:100%;color:#d7c9df;font-size:11px}
 .uno-countdown.is-urgent b{background:#9b3447;color:#fff}
+
+/* Clock shares the color row rather than adding another block. */
+.uno-table-meta{align-items:center;margin-bottom:4px}
+.uno-countdown{margin:0;flex-wrap:nowrap;gap:6px;font-size:11px}
+.uno-countdown b{font-size:16px;padding:2px 7px}
+@media(max-width:600px){
+ .uno-in-game{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+ .uno-turn-strip{font-size:11px;gap:8px;margin-bottom:8px}
+ .uno-hand{min-height:168px;padding:12px 6px 8px}
+ .uno-hand-card.selected .uno-card{width:96px}
+ .uno-hand-tools{min-height:44px}
+ .uno-opponents b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .uno-challenge{padding:10px;margin:8px 0}
+ .uno-challenge h3{font-size:15px;margin:0 0 6px}
+ .uno-challenge p{font-size:12px;margin:6px 0}
+}

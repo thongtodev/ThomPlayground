@@ -1,7 +1,7 @@
 {
   "name": "thom-mini-game-hub",
   "private": true,
-  "version": "1.61.7",
+  "version": "1.61.8",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
