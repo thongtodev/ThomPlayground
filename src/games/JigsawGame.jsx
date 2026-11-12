@@ -1,3 +1,5 @@
+import {useRoundFeedback,useNearFinish,useOnetMotion,NewPhotoBadge,UnlockMarker,markNews,hasNews,seePhoto} from '../effects/ProgressEffects';
+import {useGameJuice, gameEffect, usePieceMotion, RewardReveal} from '../effects/GameEffects.jsx';
 import {levelLabel} from '../levelLabels';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -27,7 +29,7 @@ function JigsawLevelCard({image,index,record={},onChoose}){
  const easyDone=Boolean(record.easy),hardDone=Boolean(record.hard);
  return <article className="puzzle-level-card jigsaw-level-card">
   <div className="puzzle-level-copy"><b>Level {String(index+1).padStart(2,'0')}</b></div>
-  <div className="puzzle-level-actions">
+  <div className="puzzle-level-actions"><UnlockMarker game="jigsaw" id={image.id}/>
    <button type="button" className="puzzle-difficulty-button easy" onClick={()=>onChoose(image,'easy')}>{easyDone?'Chơi lại Dễ':'Dễ · 3×3'}</button>
    <button type="button" className="puzzle-difficulty-button hard" disabled={!easyDone} title={easyDone?'':'Hoàn thành cấp độ Dễ để mở khóa'} onClick={()=>onChoose(image,'hard')}>{hardDone?'Chơi lại Khó':easyDone?'Khó · 5×5':<><Icon name="lock" size={13}/> Khó</>}</button>
   </div>
@@ -39,8 +41,8 @@ function JigsawCollectionTile({image,index,record={},onOpen}){
  const transformKey=JSON.stringify(image?.transform||null);
  const unlocked=Boolean(record.easy||record.hard);
  useEffect(()=>{let active=true;setPreview(image?.url||DEFAULT_IMAGE);renderJigsawImage(image,360).then(url=>{if(active)setPreview(url);}).catch(()=>{if(active)setPreview(image?.url||DEFAULT_IMAGE);});return()=>{active=false;};},[image?.url,transformKey]);
- return <button type="button" className={`puzzle-collection-tile ${unlocked?'unlocked':'locked'}`} disabled={!unlocked||!image?.url} onClick={()=>onOpen({...image,previewUrl:preview,record})}>
-  <div className="puzzle-collection-art">{image?.url?<img src={preview} alt={`Ảnh Level ${index+1}`}/>:<span className="puzzle-collection-placeholder"><Icon name="image" size={38}/></span>}{!unlocked&&<div className="puzzle-collection-mask"><span><Icon name="lock" size={20}/></span><b>Hoàn thành để mở khóa</b></div>}</div>
+ return <button type="button" className={`puzzle-collection-tile ${unlocked?'unlocked':'locked'}`} disabled={!unlocked||!image?.url} onClick={()=>{seePhoto('jigsaw',image.id);onOpen({...image,previewUrl:preview,record});}}>
+  <NewPhotoBadge game="jigsaw" id={image.id}/><div className="puzzle-collection-art">{image?.url?<img src={preview} alt={`Ảnh Level ${index+1}`}/>:<span className="puzzle-collection-placeholder"><Icon name="image" size={38}/></span>}{!unlocked&&<div className="puzzle-collection-mask"><span><Icon name="lock" size={20}/></span><b>Hoàn thành để mở khóa</b></div>}</div>
   <b>Level {String(index+1).padStart(2,'0')}</b><small>{unlocked?`${record.easy?'Dễ đã đạt':''}${record.easy&&record.hard?' · ':''}${record.hard?'Khó đã đạt':''}`:'Chưa mở khóa'}</small>
  </button>;
 }
@@ -60,15 +62,19 @@ const JigsawPieceGraphic=memo(function JigsawPieceGraphic({piece,size,imageSrc,r
 });
 
 function JigsawPieceButton({piece,size,imageSrc,rotation=0,selected=false,source='tray',onClick,onDragStart,onDragEnd,onDragOver,onDrop,onPointerDown,onPointerMove,onPointerUp,onPointerCancel,dragging=false}){
- return <button type="button" className={`jigsaw-piece-button ${source==='board'?'on-board':'in-tray'} ${selected?'selected':''} ${dragging?'touch-dragging':''}`} draggable onClick={onClick} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver} onDrop={onDrop} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerCancel} aria-label={`Mảnh ghép ${piece+1}${rotation?`, xoay ${rotation} độ`:''}`}>
+ return <button type="button" data-juice-piece={piece} className={`jigsaw-piece-button ${source==='board'?'on-board':'in-tray'} ${selected?'selected':''} ${dragging?'touch-dragging':''}`} draggable onClick={onClick} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver} onDrop={onDrop} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerCancel} aria-label={`Mảnh ghép ${piece+1}${rotation?`, xoay ${rotation} độ`:''}`}>
   <JigsawPieceGraphic piece={piece} size={size} imageSrc={imageSrc} rotation={rotation}/>
  </button>;
 }
 
-function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultReady,saveRecord=()=>{},jigsawProgress={},onRestart,postResultActionsRef}){
+function JigsawGame({onAlbums,onHome,playSound=()=>{},images={},album=[],onEvent=()=>{},onResultReady,saveRecord=()=>{},jigsawProgress={},onRestart,postResultActionsRef}){
  const [initialSession]=useState(()=>loadGameSession('jigsaw'));const savedRef=useRef(initialSession);const snapshot=savedRef.current;const saved=snapshot && levelLabel(album,`${snapshot.chosen?.id}-${snapshot.difficulty}`)?snapshot:null;const resumeRef=useRef(resumePhase(saved));
  const [phase,setPhase]=useState(()=>restoredPhase(saved)),[difficulty,setDifficulty]=useState(()=>saved?.difficulty||'easy'),[chosen,setChosen]=useState(()=>saved?.chosen||null),[placements,setPlacements]=useState(()=>saved?.placements||[]),[tray,setTray]=useState(()=>saved?.tray||[]),[rotations,setRotations]=useState(()=>saved?.rotations||{}),[moves,setMoves]=useState(()=>saved?.moves||0),[seconds,setSeconds]=useState(()=>saved?.seconds||0),[selectedPiece,setSelectedPiece]=useState(null),[dragged,setDragged]=useState(null),[showSample,setShowSample]=useState(false),[showWinImage,setShowWinImage]=useState(false),[showWinImagePreview,setShowWinImagePreview]=useState(false),[imageSrc,setImageSrc]=useState(DEFAULT_IMAGE),[winResult,setWinResult]=useState(null);
  const [layout,setLayout]=useState(()=>saved?(saved.layout||'tray'):'board');
+ usePieceMotion(".jigsaw-piece-button[data-juice-piece]",placements,phase==='playing'||phase==='won');
+ useGameJuice('jigsaw',{phase,placements,rotations,moves});
+ useRoundFeedback(phase);
+ useNearFinish(phase,placements.filter((v,i)=>v!==i||rotations[v]%360!==0).length);
  const finished=useRef(false),touchDragRef=useRef(null),suppressTouchClickRef=useRef(0),n=difficulty==='easy'?3:5,total=n*n;
   const openCollection=event=>{event?.preventDefault?.();event?.stopPropagation?.();onAlbums('jigsaw');};
   const closeWinImage=event=>{event?.preventDefault?.();event?.stopPropagation?.();setShowWinImage(false);onResultReady?.(winResult);};
@@ -101,7 +107,7 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
  const reset=()=>{finished.current=false;setPhase('ready');setChosen(null);setPlacements([]);setTray([]);setRotations({});setMoves(0);setSeconds(0);setSelectedPiece(null);setDragged(null);setShowSample(false);setShowWinImage(false);setShowWinImagePreview(false);setWinResult(null);};
  const complete=(next,nextRotations,count)=>{
   if(finished.current||!isJigsawSolved(next,nextRotations))return;
-  finished.current=true;setShowWinImage(true);setPhase('won');saveRecord('jigsaw',{label:`${count} thao tác`,value:count,kind:'steps'});
+  if(!jigsawProgress[chosen.id]?.easy&&!jigsawProgress[chosen.id]?.hard)markNews('photo','jigsaw',[chosen.id]);if(difficulty==='easy'&&!jigsawProgress[chosen.id]?.easy){markNews('level','jigsaw',[chosen.id]);gameEffect({type:'message',label:'Mở thêm một màn rồi nè, chim cá thử tiếp nha!',duration:2200});}finished.current=true;setShowWinImage(true);setPhase('won');saveRecord('jigsaw',{label:`${count} thao tác`,value:count,kind:'steps'});
   const label=`${count} thao tác · ${fmt(seconds)}`;
   const variant=`${chosen.id}-${difficulty}`;
    const variantLabel=levelLabel(album,variant);
@@ -126,7 +132,7 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
   if(sourceIndex>=0){[next[sourceIndex],next[target]]=[next[target],next[sourceIndex]];}
   else if(trayIndex>=0){nextTray.splice(trayIndex,1);const displaced=next[target];next[target]=piece;if(displaced!=null)nextTray.push(displaced);}
   else return;
-  const count=moves+1;setPlacements(next);setTray(nextTray);setMoves(count);setSelectedPiece(null);complete(next,rotations,count);
+  playSound(540,.04);const count=moves+1;setPlacements(next);setTray(nextTray);setMoves(count);setSelectedPiece(null);complete(next,rotations,count);
  };
  const returnToTray=slot=>{
   if(phase!=='playing'||slot<0||slot>=total||placements[slot]==null)return;
@@ -136,7 +142,7 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
   if(phase!=='playing'||!selectedPiece||!Number.isInteger(selectedPiece.id))return;
   const piece=selectedPiece.id;
   const nextRotations={...rotations,[piece]:normalizeJigsawRotation((rotations[piece]||0)+direction)};
-  setRotations(nextRotations);
+  playSound(460,.04);setRotations(nextRotations);
   const count=moves+1;setMoves(count);complete(placements,nextRotations,count);
  };
  const swapSelectedWith=target=>{
@@ -145,7 +151,7 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
   const swapped=swapJigsawPiecePositions(placements,tray,selectedPiece,target);
   if(!swapped.changed){setSelectedPiece(null);return;}
   const count=moves+1;
-  setPlacements(swapped.placements);
+  playSound(540,.04);setPlacements(swapped.placements);
   setTray(swapped.tray);
   setMoves(count);
   setSelectedPiece(null);
@@ -226,7 +232,7 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
  const handleDropOnBoard=(e,slot)=>{e.preventDefault();let item=dragged;if(!item){const raw=e.dataTransfer.getData('text/plain');if(raw.startsWith('piece:'))item={id:Number(raw.slice(6))};}if(item)movePieceToBoard(item.id,slot);setDragged(null);};
  const handleDropOnTray=e=>{e.preventDefault();let item=dragged;if(!item){const raw=e.dataTransfer.getData('text/plain');if(raw.startsWith('piece:'))item={id:Number(raw.slice(6))};}if(item){const slot=placements.indexOf(item.id);if(slot>=0)returnToTray(slot);}setDragged(null);};
  const handleDropOnTrayPiece=(e,targetPiece)=>{e.preventDefault();e.stopPropagation();let item=dragged;if(!item){const raw=e.dataTransfer.getData('text/plain');if(raw.startsWith('piece:'))item={id:Number(raw.slice(6))};}if(!item||item.id===targetPiece)return;const from=tray.indexOf(item.id),to=tray.indexOf(targetPiece);if(from>=0&&to>=0){const next=[...tray];const [moved]=next.splice(from,1);next.splice(to,0,moved);setTray(next);}else if(placements.includes(item.id)){const slot=placements.indexOf(item.id);returnToTray(slot);}setDragged(null);};
- if(phase==='ready')return <><main className="game-intro puzzle-intro jigsaw-intro"><button className="back-link" onClick={onHome}>Tất cả trò chơi</button><div className="intro-card puzzle-intro-card"><div className="intro-icon"><Icon name="puzzle" size={48}/></div><div className="eyebrow">JIGSAW PUZZLE · THƠM PLAYGROUND</div><h1>Mảnh Ghép Nhà Thơm</h1><p>Một bức hình đã bị chia thành nhiều mảnh nhỏ. Hãy tìm đúng vị trí, xoay và ghép lại để bức hình của chú Thơm hiện ra nhé!</p><div className="new-game-rules"><span><Icon name="hand"/> Kéo thả mảnh ghép hoặc chọn một mảnh rồi chạm mảnh khác để hoán đổi vị trí.</span><span><Icon name="rotate"/> Hoán đổi không làm xoay mảnh. Muốn đổi hướng, dùng nút xoay trái hoặc phải.</span><span><Icon name="target"/> Đưa tất cả mảnh về đúng vị trí và đúng hướng để hoàn thành.</span><span><Icon name="layers"/> Thắng cấp độ Dễ để mở khóa cấp độ Khó.</span></div><div className="puzzle-difficulty-guide"><span><b>Dễ</b> · 3×3</span><span><b>Khó</b> · 5×5 · Mở sau khi thắng Dễ</span></div>
+ if(phase==='ready')return <><main className="game-intro puzzle-intro jigsaw-intro"><button className="back-link" onClick={onHome}>Tất cả trò chơi</button><div className="intro-card puzzle-intro-card"><div className="intro-icon"><Icon name="puzzle" size={48}/></div><div className="eyebrow">JIGSAW PUZZLE · THƠM PLAYGROUND</div><h1>Mảnh Ghép Nhà Thơm</h1><p>Một bức hình đã bị chia thành nhiều mảnh nhỏ. Hãy tìm đúng vị trí, xoay và ghép lại để bức hình của chú Thơm hiện ra nhé!</p><div className="new-game-rules"><span><Icon name="hand"/> Kéo thả hoặc chạm hai mảnh để đổi chỗ, ghép chú Thơm lại nào!</span><span><Icon name="rotate"/> Đổi chỗ thì mảnh vẫn giữ nguyên hướng nha. Muốn xoay, chim cá dùng nút trái hoặc phải nhé!</span><span><Icon name="target"/> Đưa tất cả mảnh về đúng vị trí và đúng hướng để hoàn thành.</span><span><Icon name="layers"/> Thắng cấp độ Dễ để mở khóa cấp độ Khó.</span></div><div className="puzzle-difficulty-guide"><span><b>Dễ</b> · 3×3</span><span><b>Khó</b> · 5×5 · Mở sau khi thắng Dễ</span></div>
   
   {album.length?<div className="puzzle-level-grid">{album.map((image,index)=><JigsawLevelCard key={image.id} image={image} index={index} record={jigsawProgress[image.id]||{}} onChoose={begin}/>)}</div>:<p className="puzzle-empty-album">Chưa có hình trong album. Admin hãy thêm ảnh vào Mảnh Ghép Nhà Thơm.</p>}
  </div></main></>;
@@ -253,8 +259,8 @@ function JigsawGame({onAlbums,onHome,images={},album=[],onEvent=()=>{},onResultR
   </div>}
   <p className="jigsaw-touch-hint">Chạm hai mảnh để đổi chỗ. Chọn mảnh rồi xoay trái hoặc phải.</p>
   {showSample&&<div className="overlay jigsaw-sample-overlay" onClick={()=>setShowSample(false)}><div className="result-card jigsaw-sample-modal" onClick={e=>e.stopPropagation()}><button className="close-modal" onClick={()=>setShowSample(false)} aria-label="Đóng"><Icon name="close"/></button><h2>Hình gốc cần ghép</h2><img src={chosen?.url||DEFAULT_IMAGE} alt="Ảnh gốc đầy đủ của Level"/></div></div>}
-  {phase==='won'&&showWinImage&&createPortal(<div className="overlay jigsaw-unlocked-overlay" role="dialog" aria-modal="true" aria-label="Ghép hình thành công"><div className="result-card jigsaw-result"><button type="button" className="image-review-close" onClick={closeWinImage} aria-label="Đóng hình gốc, xem bảng thành tích"><Icon name="close" size={19}/></button><Icon name="trophy" size={42}/><h2>Ghép thành công!</h2><img className="jigsaw-unlocked-full-image" src={chosen?.url||DEFAULT_IMAGE} onClick={()=>setShowWinImagePreview(true)} role="button" tabIndex={0} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setShowWinImagePreview(true);}}} alt="Nhấn để xem ảnh gốc đầy đủ đã mở khóa"/><p>{difficultyName[difficulty]} · {moves} thao tác · {fmt(seconds)}</p><button type="button" className="primary-button" onClick={openCollection}>Bộ sưu tập hình ảnh</button></div></div>,document.body)}
-  {showWinImagePreview&&chosen&&createPortal(<div className="overlay puzzle-collection-overlay puzzle-collection-preview-overlay unlocked-image-preview-overlay" onClick={event=>{event.preventDefault();event.stopPropagation();setShowWinImagePreview(false);}}><div className="result-card puzzle-collection-modal" onClick={event=>event.stopPropagation()}><button type="button" className="close-modal" onClick={event=>{event.preventDefault();event.stopPropagation();setShowWinImagePreview(false);}} aria-label="Đóng hình"><Icon name="close" size={19}/></button><h2>Ảnh đã mở khóa</h2><img src={chosen.url||DEFAULT_IMAGE} alt="Ảnh gốc đầy đủ đã mở khóa"/></div></div>,document.body)}{phase==='paused'&&<div className="overlay"><div className="result-card"><span className="result-emoji"><Icon name="save" size={36}/></span><h2>Bạn còn một ván đang chơi dở</h2><p>Vị trí mảnh ghép, hướng xoay và thời gian đã được lưu.</p><button className="primary-button" onClick={()=>setPhase(resumeRef.current)}>Tiếp tục ván trước</button><button className="text-button" onClick={reset}>Chọn Level khác / chơi mới</button></div></div>}
+  {phase==='won'&&showWinImage&&createPortal(<div className="overlay jigsaw-unlocked-overlay" role="dialog" aria-modal="true" aria-label="Ghép hình thành công"><div className="result-card jigsaw-result"><button type="button" className="image-review-close" onClick={closeWinImage} aria-label="Đóng hình gốc, xem bảng thành tích"><Icon name="close" size={19}/></button><Icon name="trophy" size={42}/><h2>Ghép thành công!</h2><RewardReveal/>{hasNews('photo','jigsaw',chosen?.id)&&<p>Thêm một chú Thơm vào bộ sưu tập của chim cá nè!</p>}<img className="jigsaw-unlocked-full-image" src={chosen?.url||DEFAULT_IMAGE} onClick={()=>setShowWinImagePreview(true)} role="button" tabIndex={0} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setShowWinImagePreview(true);}}} alt="Nhấn để xem ảnh gốc đầy đủ đã mở khóa"/><p>{difficultyName[difficulty]} · {moves} thao tác · {fmt(seconds)}</p><button type="button" className="primary-button" onClick={openCollection}>Bộ sưu tập hình ảnh</button></div></div>,document.body)}
+  {showWinImagePreview&&chosen&&createPortal(<div className="overlay puzzle-collection-overlay puzzle-collection-preview-overlay unlocked-image-preview-overlay" onClick={event=>{event.preventDefault();event.stopPropagation();setShowWinImagePreview(false);}}><div className="result-card puzzle-collection-modal" onClick={event=>event.stopPropagation()}><button type="button" className="close-modal" onClick={event=>{event.preventDefault();event.stopPropagation();setShowWinImagePreview(false);}} aria-label="Đóng hình"><Icon name="close" size={19}/></button><h2>Ảnh đã mở khóa</h2><img src={chosen.url||DEFAULT_IMAGE} alt="Ảnh gốc đầy đủ đã mở khóa"/></div></div>,document.body)}{phase==='paused'&&<div className="overlay"><div className="result-card"><span className="result-emoji"><Icon name="save" size={36}/></span><h2>Chim cá còn một ván đang đợi nè!</h2><p>Vị trí mảnh ghép, hướng xoay và thời gian đã được lưu.</p><button className="primary-button" onClick={()=>setPhase(resumeRef.current)}>Chơi tiếp ván trước</button><button className="text-button" onClick={reset}>Chọn Level khác / chơi mới</button></div></div>}
  </Frame></>;
 }
 

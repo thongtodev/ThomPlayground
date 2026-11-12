@@ -1,3 +1,5 @@
+import {useRoundFeedback,useNearFinish,useOnetMotion,NewPhotoBadge,UnlockMarker,markNews,seePhoto} from '../effects/ProgressEffects';
+import {useGameJuice, gameEffect, usePieceMotion, RewardReveal} from '../effects/GameEffects.jsx';
 import {recordAiOutcome} from '../gameRankings.js';
 import { LEVELS, opposite, emptyBoard, checkResult, applyCaroMove, chooseAiMove, statsKey, getCaroStats, updateCaroStats } from '../caroEngine';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,6 +21,8 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
  const [zoom,setZoom]=useState(1);
  const [allStats,setAllStats]=useState(getCaroStats);
  // Locks prevent rapid double-taps from applying two moves before React commits.
+ useRoundFeedback(outcome?'over':phase);
+ useGameJuice('tic',{phase,board,outcome});
  const moveLock=useRef(false);
  const finishedRef=useRef(false);
  useEffect(()=>{moveLock.current=false;},[board,phase]);
@@ -37,7 +41,7 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
    const updatedStats=updateCaroStats(size,gameMode,ai,result.winner,playerMark);setAllStats(updatedStats);
    const wonByPlayer=gameMode==='ai'&&result.winner===playerMark;const winCount=updatedStats[statsKey(size,gameMode,ai)]?.wins||0;
    const aiStreak=gameMode==='ai'?recordAiOutcome('tic',wonByPlayer):0;
-  onEvent({type:'tic_finish',mode:gameMode,won:wonByPlayer,completed:'tic',boardSize:size,difficulty:ai,result:{gameId:'tic',gameName:'Thơm X Thơm O',title:result.winner==='draw'?'Ván này hòa!':wonByPlayer?'Bạn thắng rồi!':'Chú Thơm chiến thắng!',summary:`Bàn ${size}×${size} · ${gameMode==='ai'?`Đấu với chú Thơm · ${levelName}`:'Hai người chơi'} · ${result.winner==='draw'?'Hòa':`Bên ${result.winner} thắng`}.`,variant:`${size}-${gameMode==='ai'?ai:'local'}`,variantLabel:`${size}×${size} · ${gameMode==='ai'?levelName:'Hai người'}`,metricKind:'wins',metricValue:winCount,metricLabel:`${winCount} trận thắng`,eligible:wonByPlayer,details:{aiStreak,size,mode:gameMode,difficulty:ai,winner:result.winner,playerMark}}});
+  onEvent({type:'tic_finish',mode:gameMode,won:wonByPlayer,completed:'tic',boardSize:size,difficulty:ai,result:{gameId:'tic',gameName:'Thơm X Thơm O',title:result.winner==='draw'?'Ngang tài ngang sức nha chim cá!':wonByPlayer?'Chim cá giỏi quá, thắng rồi nè!':'Ván này chú thắng nha, làm ván nữa không?',summary:`Bàn ${size}×${size} · ${gameMode==='ai'?`Đấu với chú Thơm · ${levelName}`:'Hai người chơi'} · ${result.winner==='draw'?'Hòa':`Bên ${result.winner} thắng`}.`,variant:`${size}-${gameMode==='ai'?ai:'local'}`,variantLabel:`${size}×${size} · ${gameMode==='ai'?levelName:'Hai người'}`,metricKind:'wins',metricValue:winCount,metricLabel:`${winCount} trận thắng`,eligible:wonByPlayer,details:{aiStreak,size,mode:gameMode,difficulty:ai,winner:result.winner,playerMark}}});
    if(gameMode==='ai'&&result.winner===playerMark)saveRecord('tic',{label:`Thắng chú Thơm ${size}×${size}`,value:1,kind:'win'});
    playSound(result.winner==='draw'?450:720);
  };
@@ -94,9 +98,9 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
  </>;
  if(phase==='ready')return <GameIntro images={images} game={GAMES[2]} onBack={onHome} onStart={start}>
    <div className="rules-list">
-     <span><Icon name="tic"/> Bàn 3×3: xếp 3 quân liền nhau theo hàng ngang, dọc hoặc chéo là thắng.</span>
+     <span><Icon name="tic"/> Bàn 3×3, chim cá nối đủ 3 quân ngang, dọc hoặc chéo là thắng nha!</span>
      <span><Icon name="flag"/> Bàn 10×10: nối 5 quân liên tiếp; kể cả khi bị chặn hai đầu vẫn được tính thắng.</span>
-     <span><Icon name="check"/> X luôn đi trước. Hết ô mà chưa ai thắng thì hai bên hòa nhé!</span>
+     <span><Icon name="check"/> X đi trước nha! Kín bàn mà chưa ai thắng thì mình hòa, làm ván nữa thôi.</span>
      <span><Icon name="brain"/> Có thể đấu với chú Thơm qua 4 mức độ hoặc rủ một người bạn cùng chơi.</span>
    </div>
    <div className="rules-list">
@@ -107,7 +111,7 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
    </div>
    <div className="caro-settings">{settings}</div>
  </GameIntro>;
- const status=outcome?(outcome.winner==='draw'?'Ván này hòa!':`${outcome.winner} chiến thắng${mode==='ai'?(outcome.winner===humanMark?' · Bạn thắng!':' · Chú Thơm thắng!'): '!'}`):`Lượt của ${turn}${mode==='ai'?(turn===humanMark?' · Bạn':' · Chú Thơm'):''}`;
+ const status=outcome?(outcome.winner==='draw'?'Ngang tài ngang sức nha chim cá!':`${outcome.winner} chiến thắng${mode==='ai'?(outcome.winner===humanMark?' · Bạn thắng!':' · Chú Thơm thắng!'): '!'}`):`Lượt của ${turn}${mode==='ai'?(turn===humanMark?' · Bạn':' · Đợi chú nghĩ một xíu nha…'):''}`;
  return <GameFrame game={GAMES[2]} images={images} onHome={onHome} onReset={start} onRestart={onRestart}
    stats={[{label:'Số ván',value:currentStats.games},{label:'X thắng',value:currentStats.X},{label:'O thắng',value:currentStats.O},{label:'Hòa',value:currentStats.draw},...(mode==='ai'?[{label:'Bạn thắng',value:currentStats.wins},{label:'Bạn thua',value:currentStats.losses}]:[])]}
    controls={<span className="level-chip">{size}×{size} · {mode==='ai'?levelName:'2 người'}</span>}>
@@ -116,7 +120,7 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
      {mode==='ai'&&<label>Chú Thơm<select value={ai} onChange={e=>changeAi(e.target.value)}>{LEVELS.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>}
      <button type="button" className="caro-new-button" onClick={()=>setPhase('ready')}>Cài đặt</button>
    </div>
-   <div className="tic-status" role="status" aria-live="polite"><Icon name={outcome?'flag':'circle'} size={15}/> <b>{status}</b></div>
+   {outcome?.winner==='draw'&&<div className="caro-draw-fx" aria-hidden="true"><span>X</span><span>O</span></div>}<div className="tic-status" role="status" aria-live="polite"><Icon name={outcome?'flag':'circle'} size={15}/> <b>{status}{!outcome&&mode==='ai'&&turn!==humanMark&&<span className="fx-thinking" aria-hidden="true"><i/><i/><i/></span>}</b></div>
    {size===10&&<div className="caro-zoom-controls"><span>Phóng to bàn cờ</span><button type="button" onClick={()=>setZoom(z=>Math.max(1,+(z-.5).toFixed(1)))} disabled={zoom===1} aria-label="Thu nhỏ"><Icon name="zoom-out" size={16}/></button><b>{zoom}×</b><button type="button" onClick={()=>setZoom(z=>Math.min(2.5,+(z+.5).toFixed(1)))} disabled={zoom===2.5} aria-label="Phóng to"><Icon name="zoom-in" size={16}/></button></div>}
    <div className={`caro-board-viewport ${size===10?'caro-board-scroll':''}`}>
      <div className={`tic-board caro-board-${size}`} style={{'--caro-size':size,'--caro-zoom':zoom}} role="grid" aria-label={`Bàn cờ ${size} nhân ${size}`}>
@@ -134,8 +138,8 @@ function TicGame({onHome,playSound,saveRecord,images,onEvent,onRestart}) {
      </div>
    </div>
    {size===10&&<p className="caro-mobile-hint">Có thể kéo ngang bàn cờ sau khi phóng to để chọn ô chính xác.</p>}
-   {outcome&&<div className="inline-result"><b>{outcome.winner==='draw'?'Hai bên hòa nhau!':`Đường thắng: ${outcome.line.length} quân liên tiếp`}</b><button className="primary-button" onClick={start}>Ván mới</button></div>}
-   {phase==='paused'&&<div className="overlay"><div className="result-card"><span className="result-emoji"><Icon name="save" size={36}/></span><h2>{saved?'Bạn còn một ván đang chơi dở':'Tạm dừng'}</h2><p>Ván cờ đã được lưu. Bạn có thể tiếp tục từ đúng nước đi trước.</p><button className="primary-button" onClick={()=>setPhase(resumeRef.current)}>Tiếp tục ván trước</button><button className="text-button" onClick={()=>{clearGameSession('tic');start();}}>Chơi ván mới</button></div></div>}
+   {outcome&&<div className="inline-result"><b>{outcome.winner==='draw'?'Ngang tài ngang sức nha chim cá!':`Đường thắng: ${outcome.line.length} quân liên tiếp`}</b><button className="primary-button" onClick={start}>Ván mới</button></div>}
+   {phase==='paused'&&<div className="overlay"><div className="result-card"><span className="result-emoji"><Icon name="save" size={36}/></span><h2>{saved?'Chim cá còn một ván đang đợi nè!':'Tạm dừng'}</h2><p>Ván cờ đã được lưu. Bạn có thể tiếp tục từ đúng nước đi trước.</p><button className="primary-button" onClick={()=>setPhase(resumeRef.current)}>Chơi tiếp ván trước</button><button className="text-button" onClick={()=>{clearGameSession('tic');start();}}>Chơi ván mới</button></div></div>}
  </GameFrame>;
 }
 

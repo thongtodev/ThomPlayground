@@ -1,7 +1,7 @@
 {
   "name": "thom-mini-game-hub",
   "private": true,
-  "version": "1.62.0",
+  "version": "1.66.2",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
+    "canvas-confetti": "^1.9.4",
+    "motion": "^14.12.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "vite": "5.4.14"

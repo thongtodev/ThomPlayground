@@ -18,7 +18,7 @@ test('Nhớ Lời Thơm highlights a correct player selection before advancing',
 test('Simon has no response deadline; only incorrect answers cost a life', () => {
   assert.doesNotMatch(simon, /responseTimer|settings\.response|response:\s*\d+/);
   assert.doesNotMatch(simon, /hết thời gian phản hồi|s phản hồi/);
-  assert.match(simon, /không bị giới hạn thời gian trả lời/);
+  assert.match(simon, /Không giới hạn thời gian trả lời/);
   assert.match(simon, /Trả lời sai sẽ mất một mạng, nên nhớ tập trung nhé!/);
   assert.match(simon, /const press=index=>\{[\s\S]*?if\(!correct\)\{setWrong\(index\);/);
 });

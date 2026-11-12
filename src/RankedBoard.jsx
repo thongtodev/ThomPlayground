@@ -1,3 +1,4 @@
+import {rankGain} from './effects/progressRules';
 import React,{useEffect,useState,useRef} from 'react';
 import {createPortal} from 'react-dom';
 import Icon from './Icon';
@@ -94,7 +95,7 @@ export default function RankedBoard({game,album,revision=0}){
   {gain!=null&&<p role="status">Thay đổi thành tích tổng: {gain>0?'+':''}{fmt(gain)} {rankUnit(game)}.</p>}
   {rows.length>0&&<div className="leaderboard-table-wrap"><table className="leaderboard-table"><thead><tr><th>Hạng</th><th>Người chơi</th><th>Thành tích</th></tr></thead><tbody>{rows.map(row=>{
     const mine=row.id===viewer;
-    return <tr key={row.id} className={mine?'rank-viewer':''}><td><b>#{row.position}</b><small>{before[row.id]||mine?movement(before[row.id],Number(row.position)):'Mới trong bảng'}</small></td>
+    return <tr key={row.id} className={mine?'rank-viewer':''}><td><b>#{row.position}</b>{rankGain(Number(before[row.id]),Number(row.position))>0&&<span className="fx-rank-rise">↑ {rankGain(Number(before[row.id]),Number(row.position))} hạng</span>}<small>{before[row.id]||mine?movement(before[row.id],Number(row.position)):'Mới trong bảng'}</small></td>
      <td><b>{row.player_name}</b>{mine&&<small>Bạn</small>}</td>
      <td><strong>{fmt(row.score)} {rankUnit(game)}</strong><small>{secondaryLabel(game,Number(row.secondary))}</small>
       <button type="button" className="rank-details-open" aria-haspopup="dialog" onClick={()=>setDetail(row)}>Chi tiết</button></td></tr>;

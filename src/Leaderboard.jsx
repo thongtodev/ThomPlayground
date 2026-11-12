@@ -1,3 +1,4 @@
+import {ResultEffects,CountUp} from './effects/GameEffects.jsx';
 import RankedBoard from './RankedBoard';
 import {levelLabel} from './levelLabels';
 import React, {useEffect, useState} from 'react';
@@ -10,7 +11,7 @@ const formatDate = value => {
   try { return new Date(value).toLocaleString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); } catch { return ''; }
 };
 
-export function LeaderboardResultModal({onViewAlbum,albums,result,onClose,onRestart,onOpenBoard}) {
+export function LeaderboardResultModal({playSound,onViewAlbum,albums,result,onClose,onRestart,onOpenBoard}) {
   const [name,setName] = useState(getPlayerName());
   const [sending,setSending] = useState(false);
   const [sent,setSent] = useState(false);
@@ -59,7 +60,7 @@ export function LeaderboardResultModal({onViewAlbum,albums,result,onClose,onRest
   return createPortal(<div className="overlay leaderboard-overlay" role="dialog" aria-modal="true" aria-label="Kết quả và bảng kỷ lục" onClick={onClose}>
     <div className="result-card leaderboard-result-card" onClick={event=>event.stopPropagation()}>
       <button type="button" className="close-modal leaderboard-result-close" onClick={onClose} aria-label="Đóng bảng thành tích"><Icon name="close" size={18}/></button>
-      <div className="leaderboard-result-scroll"><div className="leaderboard-result-top"><span className="leaderboard-result-icon"><Icon name="trophy" size={38}/></span><span className="eyebrow">{result.gameName}</span><h2>{result.title || 'Ván chơi kết thúc!'}</h2><p>{asDepText(result.summary)}</p>{onViewAlbum&&<button type="button" className="primary-button miner-view-album" onClick={onViewAlbum}><Icon name="gallery" size={20}/> Xem bộ sưu tập</button>}</div>
+      <ResultEffects result={result} playSound={playSound}/>{result.gameId==='mole'&&result.metricValue>0&&<div className="game-loot" aria-hidden="true">{[0,1,2,3,4].map(i=><img key={i} src="/assets/slipper-cursor.png" alt="" style={{'--start-x':`${(i-2)*42}px`,animationDelay:`${i*.05}s`}}/>)}</div>}{!['tic','connect4'].includes(result.gameId)&&<div className="game-result-count"><CountUp value={result.metricValue}/><small> {result.metricKind==='steps'?'thao tác':result.metricKind==='reaction'?'ms':result.metricKind==='time'?'giây':result.metricKind==='wins'?'trận thắng':result.gameId==='simon'?'vòng':result.gameId==='connect4'?'điểm':'dép'}</small></div>}<div className="leaderboard-result-scroll"><div className="leaderboard-result-top"><span className="leaderboard-result-icon"><Icon name="trophy" size={38}/></span><span className="eyebrow">{result.gameName}</span><h2>{result.title || 'Ván chơi kết thúc!'}</h2><p>{asDepText(result.summary)}</p>{onViewAlbum&&<button type="button" className="primary-button miner-view-album" onClick={onViewAlbum}><Icon name="gallery" size={20}/> Xem bộ sưu tập</button>}</div>
       <div className="leaderboard-personal-best"><span><small>Kỷ lục cá nhân</small><b>{asDepText(result.personalBest?.metricLabel || (result.eligible ? result.metricLabel : 'Chưa có'))}</b></span><span className="leaderboard-personal-badge"><Icon name="star" size={13}/> Cá nhân</span></div>
       {result.eligible ? <form className="leaderboard-submit-form" onSubmit={submit}>
         <label htmlFor="leaderboard-player-name">Tên của bạn</label>

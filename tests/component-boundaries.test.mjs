@@ -19,7 +19,7 @@ test('each game has an independent module and the application imports all eleven
 test('stylesheet entry imports only existing files in a deliberate order', () => {
   const source = read('styles.css');
   const imports = [...source.matchAll(/@import ['"]([^'"]+)['"]/g)];
-  assert.equal(imports.length, 13);
+  assert.equal(imports.length, 15);
   imports.forEach(([, file], index) => {
     assert.ok(existsSync(new URL('../src/' + file, import.meta.url)));
     assert.ok(file.includes(`/${String(index + 1).padStart(2, '0')}-`));

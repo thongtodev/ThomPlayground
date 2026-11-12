@@ -22,7 +22,7 @@ test('jigsaw uses classic select-then-rotate-left/right controls', () => {
   assert.match(app, /onClick=\{\(\)=>rotateSelected\(90\)\}/);
   assert.match(app, /Xoay trái/);
   assert.match(app, /Xoay phải/);
-  assert.match(app, /chạm mảnh khác để hoán đổi vị trí/);
+  assert.match(app, /chạm hai mảnh để đổi chỗ/);
 });
 
 test('mobile jigsaw supports direct pointer drag from tray to target slots', () => {
@@ -33,7 +33,7 @@ test('mobile jigsaw supports direct pointer drag from tray to target slots', () 
   assert.match(app, /data-jigsaw-slot=\{slot\}/);
   assert.match(app, /touchDragRef\.current=null;[\s\S]*?movePieceToBoard\(drag\.id,Number\(slotElement\.dataset\.jigsawSlot\)\)/);
   assert.match(css, /\.jigsaw-piece-button\s*\{[^}]*touch-action:none!important/s);
-  assert.match(app, /chạm mảnh khác để hoán đổi vị trí/);
+  assert.match(app, /chạm hai mảnh để đổi chỗ/);
 });
 
 test('touch tap selects a jigsaw piece; actual drag only moves it', () => {
@@ -70,5 +70,5 @@ test('tap-to-swap exchanges jigsaw piece positions and keeps rotation unchanged'
   assert.match(swap, /setTray\(swapped\.tray\)/);
   assert.match(swap, /complete\(swapped\.placements,rotations,count\)/);
   assert.doesNotMatch(swap, /setRotations/);
-  assert.match(app, /chạm mảnh khác để hoán đổi vị trí/);
+  assert.match(app, /chạm hai mảnh để đổi chỗ/);
 });

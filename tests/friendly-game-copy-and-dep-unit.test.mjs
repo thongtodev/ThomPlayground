@@ -27,10 +27,10 @@ test('all nine game cards use the friendlier Thơm Playground descriptions', () 
 });
 
 test('each game introduction explains its core interaction in friendly language', () => {
-  for (const phrase of ['Con số trong ô cho biết', 'Bàn 3×3:', 'Chạm quá sớm', 'Chạm vào ô nằm cạnh ô trống']) {
+  for (const phrase of ['số trong ô cho biết', 'Bàn 3×3, chim cá', 'Chạm quá sớm', 'Chạm ô cạnh chỗ trống để trượt nha']) {
     assert.ok(app.includes(phrase), `missing intro guide: ${phrase}`);
   }
-  for (const phrase of ['tối đa 2 góc rẽ', 'Kéo thả mảnh ghép', 'Chọn mảnh rồi xoay trái hoặc phải']) {
+  for (const phrase of ['tối đa 2 góc rẽ', 'Kéo thả hoặc chạm hai mảnh để đổi chỗ', 'Chọn mảnh rồi xoay trái hoặc phải']) {
     assert.ok(onet.includes(phrase) || extra.includes(phrase), `missing guide: ${phrase}`);
   }
 });

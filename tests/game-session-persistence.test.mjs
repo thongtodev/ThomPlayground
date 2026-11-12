@@ -40,9 +40,9 @@ test('all nine games persist their in-progress board and game settings', () => {
     assert.ok(extra.includes("loadGameSession('"+id+"')"), id+' restores saved state');
     assert.ok(extra.includes("saveGameSession('"+id+"'"), id+' saves state');
   }
-  assert.match(app, /Tiếp tục ván trước/);
-  assert.match(onet, /Tiếp tục ván trước/);
-  assert.match(extra, /Tiếp tục ván trước/);
+  assert.match(app, /Chơi tiếp ván trước/);
+  assert.match(onet, /Chơi tiếp ván trước/);
+  assert.match(extra, /Chơi tiếp ván trước/);
 });
 
 test('the release includes the configured Supabase public client template', () => {

@@ -19,8 +19,7 @@ test('achievement cards are grouped by game and global achievements', () => {
   assert.match(app, /title:'Thử thách chung'/);
 });
 
-test('mobile touch shows a static slipper at the exact touch point', () => {
-  assert.match(app, /event\.pointerType!=='touch'/);
+test('pointer impact keeps the slipper anchored at the exact touch point', () => {
   assert.match(app, /x:event\.clientX-rect\.left,y:event\.clientY-rect\.top/);
   assert.match(app, /className="mole-touch-slipper"/);
   assert.match(css, /\.mole-touch-slipper\{[^}]*transform:translate\(-50%,-50%\)/);

@@ -313,6 +313,21 @@
   z-index: 2;
 }
 
+/* Invalid pair feedback stays on the button layer: tile images never fade or disappear. */
+.onet-cell.onet-invalid {
+  border-color: #f87171;
+  box-shadow: 0 0 0 2px #ef4444, 0 0 12px #ef444488;
+  animation: onet-invalid-shake .32s ease-out;
+}
+@keyframes onet-invalid-shake {
+  0%, 100% { translate: 0 0; }
+  22%, 65% { translate: -4px 0; }
+  44%, 85% { translate: 4px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .onet-cell.onet-invalid { animation: none; }
+}
+
 .onet-cell.onet-hinted {
   border-color: #f6d16d;
   animation: onet-glow .55s infinite alternate;

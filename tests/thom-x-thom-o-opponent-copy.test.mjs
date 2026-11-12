@@ -12,9 +12,9 @@ test('Thơm X Thơm O names its computer opponent as chú Thơm everywhere in th
   assert.match(tic, /<option value="ai">Bạn đấu với chú Thơm<\/option>/);
   assert.match(tic, /Độ khó của chú Thơm/);
   assert.match(tic, /<label>Chú Thơm<select/);
-  assert.match(tic, /Chú Thơm chiến thắng!/);
+  assert.match(tic, /Ván này chú thắng nha, làm ván nữa không\?/);
   assert.match(tic, /· Chú Thơm thắng!/);
-  assert.match(tic, /' · Chú Thơm'/);
+  assert.match(tic, /' · Đợi chú nghĩ một xíu nha…'/);
   assert.match(tic, /Đấu với chú Thơm · \$\{levelName\}/);
   assert.doesNotMatch(tic, /Người chơi vs Máy|Độ khó AI|<label>AI<select|Máy chiến thắng|Máy thắng|Lượt của Máy/);
 });
@@ -40,7 +40,7 @@ test('Bốn Quân Nhà Thơm also uses chú Thơm terminology instead of machine
   const connect4 = extra.slice(start, end);
   assert.match(connect4, /<option value="ai">Bạn đấu với chú Thơm<\/option>/);
   assert.match(connect4, /Độ khó của chú Thơm/);
-  assert.match(connect4, /Chú Thơm đang suy nghĩ/);
+  assert.match(connect4, /Đợi chú nghĩ một xíu nha…/);
   assert.match(connect4, /Chú Thơm chiến thắng/);
   assert.match(connect4, /Đấu với chú Thơm ·/);
   assert.doesNotMatch(connect4, /Người chơi vs Máy|Độ khó AI|Máy chiến thắng|Máy đã nối đủ|Máy đang suy nghĩ|Đấu máy|AI ·/);

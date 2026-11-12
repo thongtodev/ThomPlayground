@@ -1,0 +1,59 @@
+/* Effects target game art only. Control button styling is intentionally untouched. */
+.game-fx-layer{position:fixed;inset:0;z-index:100000;pointer-events:none;overflow:hidden}
+.game-fx-layer *{pointer-events:none!important}
+.game-fx-confetti{position:absolute;inset:0;width:100%;height:100%}
+.game-fx-burst{position:absolute;width:0;height:0}
+.game-fx-label{position:absolute;bottom:22px;left:0;transform:translateX(-50%);width:max-content;max-width:min(260px,78vw);padding:7px 12px;border-radius:16px;background:#33253eee;color:#ffe6a5;font-weight:750;font-size:14px;text-align:center;animation:fx-label 1.3s both}
+.game-fx-burst i{position:absolute;width:7px;height:7px;background:#f5d78a;border-radius:2px;animation:fx-particle .6s ease-out both}
+.fx-dust i{background:#b67f4b;border-radius:50%;width:5px;height:5px}
+.fx-ring i{width:30px;height:30px;border:3px solid #f7d780;background:none;border-radius:50%;animation:fx-ring .45s ease-out both}
+.game-record-badge{width:fit-content;margin:10px auto;color:#ffe0a0;font-weight:800;animation:fx-pop .4s ease-out both}
+.game-reward-seal{text-align:center;color:#efc66d;pointer-events:none}.game-reward-seal>span{display:inline-block;font-size:34px;animation:fx-unlock .55s both}.game-reward-seal i{display:inline-block;font-style:normal;font-size:26px;animation:fx-pop .35s both;margin:0 4px}
+.game-result-count{text-align:center;font-size:26px;font-weight:800;color:#f4dba4;margin:10px}
+.puzzle-unlocked-full-image,.jigsaw-unlocked-full-image,.miner-reward-dialog .miner-collection>img,.onet-unlocked-image-button>img{animation:fx-reveal .55s ease-out both}
+.onet-connection polyline{stroke-dasharray:30;stroke-dashoffset:30;animation:fx-draw .22s linear forwards}
+.mole-touch-slipper{animation:fx-slipper .25s ease-out both!important}
+.mole-hit-ghost{position:absolute;left:20%;bottom:22%;width:60%;height:110%;object-fit:contain;pointer-events:none;animation:fx-hit-ghost .32s both;z-index:4}
+.reaction-zone.measured h2{animation:fx-pop .25s both}
+.reaction-round-results{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.reaction-round-results span{padding:8px;border:1px solid #e8c67866;border-radius:10px;animation:fx-pop .25s both}
+.simon-progress{height:6px;margin:14px 0;border-radius:8px;background:#ffffff16;overflow:hidden}.simon-progress>span{display:block;height:100%;background:#ecc878;transition:width .25s ease-out}
+.simon-life-feedback{display:flex;justify-content:center;gap:8px;color:#ed9dbe}.simon-life-feedback span{display:inline-block}.simon-life-feedback .lost{animation:fx-life .35s both}
+.miner-carried-art{transform-box:fill-box;transform-origin:center;animation:fx-sway .55s ease-in-out 2 alternate}
+.miner-hud progress{transition:all .25s}.fx-thinking{display:inline-flex;gap:3px;margin-left:6px}.fx-thinking i{width:4px;height:4px;background:currentColor;border-radius:50%;animation:fx-think .9s infinite}.fx-thinking i:nth-child(2){animation-delay:.15s}.fx-thinking i:nth-child(3){animation-delay:.3s}
+@keyframes fx-label{0%{opacity:0;translate:0 8px}15%,75%{opacity:1}100%{opacity:0;translate:0 -20px}}
+@keyframes fx-particle{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
+@keyframes fx-ring{from{opacity:1;transform:translate(-50%,-50%) scale(.3)}to{opacity:0;transform:translate(-50%,-50%) scale(2.5)}}
+@keyframes fx-pop{0%{transform:scale(.8);opacity:.4}65%{transform:scale(1.07)}100%{transform:scale(1);opacity:1}}
+@keyframes fx-unlock{0%{transform:rotate(-35deg) scale(.5);opacity:0}70%{transform:rotate(10deg) scale(1.15)}100%{transform:rotate(0);opacity:1}}
+@keyframes fx-reveal{from{opacity:.2;transform:perspective(600px) rotateY(-18deg) scale(.96)}to{opacity:1;transform:perspective(600px) rotateY(0) scale(1)}}
+@keyframes fx-draw{to{stroke-dashoffset:0}}
+@keyframes fx-slipper{from{transform:translate(-35%,-80%) rotate(-32deg);opacity:.5}to{transform:translate(-50%,-50%) rotate(0);opacity:1}}
+@keyframes fx-hit-ghost{0%{opacity:1;transform:translateY(0) scale(1)}35%{transform:translateY(-12px) scale(1.08)}100%{opacity:0;transform:translateY(8px) scale(.9)}}
+@keyframes fx-life{to{opacity:.2;transform:scale(.6)}}
+@keyframes fx-sway{from{rotate:-5deg}to{rotate:5deg}}
+@keyframes fx-think{50%{opacity:.3;transform:translateY(-3px)}}
+@media(prefers-reduced-motion:reduce){.game-fx-burst i{display:none}.game-fx-label,.game-record-badge,.game-reward-seal span,.game-reward-seal i,.puzzle-unlocked-full-image,.jigsaw-unlocked-full-image,.miner-reward-dialog .miner-collection>img,.onet-unlocked-image-button>img,.mole-touch-slipper,.mole-hit-ghost,.reaction-zone.measured h2,.reaction-round-results span,.simon-life-feedback .lost,.miner-carried-art,.fx-thinking i{animation:none!important}.onet-connection polyline{animation:none;stroke-dashoffset:0}.simon-progress>span{transition:none}}
+.game-win-line{position:absolute;pointer-events:none}.game-win-line line{stroke:#f6d77c;stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:fx-draw .4s .15s forwards}
+.miner-stars-fx{position:absolute;top:12%;left:0;right:0;z-index:5;pointer-events:none}.miner-stars-fx i{font-size:42px}
+.fx-end-card{animation:fx-end-reveal .25s .5s both}
+@keyframes fx-end-reveal{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+@media(prefers-reduced-motion:reduce){.game-win-line line{animation:none;stroke-dashoffset:0}.fx-end-card{animation:none}}
+.game-loot{height:30px;position:relative;text-align:center;pointer-events:none}.game-loot img{position:absolute;width:26px;height:26px;object-fit:contain;left:calc(50% - 13px);animation:fx-loot .55s both}
+@keyframes fx-loot{from{opacity:0;transform:translate(var(--start-x),-28px) rotate(-20deg)}30%{opacity:1}to{opacity:0;transform:translate(0,24px) rotate(10deg)}}
+@media(prefers-reduced-motion:reduce){.game-loot{display:none}}
+.simon-finish-sequence{display:flex;justify-content:center;gap:8px}.simon-finish-sequence img{width:42px;height:42px;object-fit:cover;border-radius:12px;animation:fx-pop .3s both}
+.caro-draw-fx{display:flex;justify-content:center;gap:6px;font-size:24px;font-weight:800;color:#f3d395;pointer-events:none}.caro-draw-fx span:first-child{animation:fx-draw-x .45s both}.caro-draw-fx span:last-child{animation:fx-draw-o .45s both}
+@keyframes fx-draw-x{from{transform:translateX(-25px) rotate(-15deg)}to{transform:translateX(0) rotate(0)}}
+@keyframes fx-draw-o{from{transform:translateX(25px) rotate(15deg)}to{transform:translateX(0) rotate(0)}}
+@media(prefers-reduced-motion:reduce){.simon-finish-sequence img,.caro-draw-fx span{animation:none!important}}
+.fx-new-photo{display:block;color:#ffe1a0;font-size:11px;font-weight:750;padding:4px 5px;line-height:1.3;background:#3e3047;border-radius:7px;margin:4px auto;max-width:100%}
+.fx-unlock-marker{display:inline-block;border:1px solid #f5cf75;border-radius:8px;padding:3px;animation:fx-unlock .5s both;pointer-events:none}
+.fx-last-move{outline:2px solid #f4d397;outline-offset:-3px;border-radius:50%}
+.fx-turn-clock{position:absolute;width:48px;height:48px;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);pointer-events:none;overflow:visible}.fx-turn-clock circle{fill:none;stroke:#ffffff30;stroke-width:2}.fx-turn-clock circle+circle{stroke:#efd38b;transition:stroke-dashoffset .9s linear}.fx-turn-clock.urgent circle+circle{stroke:#f297a4}
+.uno-avatar:has(.fx-turn-clock){position:relative}.fx-own-clock{position:relative;display:inline-flex;width:48px;height:48px;margin:0 8px;align-items:center;justify-content:center;vertical-align:middle;font-size:13px}
+.fx-rank-rise{display:inline-block;color:#9fe4bc;font-size:12px;animation:fx-pop .35s both}
+.fx-miner-flight{position:absolute;font-size:24px;animation:fx-buff-flight .55s ease-out both;pointer-events:none}
+@keyframes fx-buff-flight{from{opacity:1;transform:translate(-50%,-50%) scale(.8)}to{opacity:0;transform:translate(var(--to-x),var(--to-y)) scale(1.1)}}
+@media(prefers-reduced-motion:reduce){.fx-unlock-marker,.fx-rank-rise{animation:none}.fx-turn-clock circle+circle{transition:none}.fx-miner-flight{display:none}}
+.fx-combo-face{position:absolute;right:0;top:0;font-size:28px;z-index:8;pointer-events:none;animation:fx-pop .3s both}
+@media(prefers-reduced-motion:reduce){.fx-combo-face{animation:none}}

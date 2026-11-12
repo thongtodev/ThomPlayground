@@ -84,3 +84,22 @@
  .uno-challenge p{font-size:12px;margin:6px 0}
 }
 .uno-bot-picker{max-width:320px;margin:12px auto 18px;gap:6px!important;font-size:14px}.uno-bot-picker small{font-size:12px;color:#c8bdd2}
+
+/* Lightweight state-confirmed table effects. */
+.uno-table{transition:border-color .35s ease}.uno-table-meta>b{transition:color .35s ease}
+.uno-table.uno-color-red .uno-table-meta>b{color:#ff9ca0}.uno-table.uno-color-blue .uno-table-meta>b{color:#9ec6ff}.uno-table.uno-color-green .uno-table-meta>b{color:#91e3b8}.uno-table.uno-color-yellow .uno-table-meta>b{color:#ffdf88}
+.uno-flight-layer{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
+.uno-moving-card{position:absolute;animation:uno-card-travel .5s ease-in-out both;pointer-events:none}.uno-moving-card .uno-card{width:60px!important}
+@keyframes uno-card-travel{0%{transform:translate(0,0) rotate(-7deg);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(5deg);opacity:0}}
+.uno-player-fx{display:block;color:#ffdf8f;font-size:14px;animation:uno-badge-pop .3s ease-out both}
+@keyframes uno-badge-pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.uno-my-turn-fx .uno-hand-area{animation:uno-hand-turn .7s ease-out 1;border-radius:14px}
+@keyframes uno-hand-turn{0%{outline:2px solid #ffdf8f;outline-offset:3px}100%{outline:2px solid transparent;outline-offset:6px}}
+.uno-reverse-fx .uno-turn-direction>span{display:inline-block;animation:uno-reverse-spin .55s ease-out 1}
+@keyframes uno-reverse-spin{from{transform:rotate(180deg)}to{transform:rotate(0)}}
+.uno-turn-toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:#30273ff2;color:#ffe39b;border:1px solid #ffe39b;border-radius:20px;padding:10px 16px;max-width:85vw;text-align:center;z-index:65;pointer-events:none;animation:uno-badge-pop .2s ease-out}
+.uno-fx-message{position:fixed;top:33%;left:50%;transform:translateX(-50%);width:min(300px,82vw);padding:18px;background:#2b233bf5;border:2px solid #ebc77d;border-radius:20px;display:grid;gap:8px;text-align:center;pointer-events:none;z-index:70;color:#ffe8b5}
+.uno-fx-message strong{font-size:22px}.uno-fx-message span{font-size:17px;overflow-wrap:anywhere}.uno-fx-message.is-winner strong{color:#ffda75}
+.uno-fx-message>i{position:absolute;left:var(--x);top:0;width:7px;height:12px;background:#ffdc80;animation:uno-win-confetti 1.4s var(--delay) ease-out both}.uno-fx-message>i:nth-child(2n){background:#9bdccb}.uno-fx-message>i:nth-child(3n){background:#bea4ff}
+@keyframes uno-win-confetti{from{transform:translateY(-70px) rotate(0);opacity:1}to{transform:translateY(160px) rotate(240deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.uno-moving-card,.uno-fx-message>i{display:none}.uno-my-turn-fx .uno-hand-area,.uno-reverse-fx .uno-turn-direction>span,.uno-player-fx,.uno-turn-toast{animation:none}.uno-table,.uno-table-meta>b{transition:none}}

@@ -21,7 +21,7 @@ test('both puzzle collections open the original source image, not the cropped th
 
 test('jigsaw success and its reference-image viewer display the original uploaded image', () => {
   assert.match(newGames, /<h2>Hình gốc cần ghép<\/h2><img src=\{chosen\?\.url\|\|DEFAULT_IMAGE\}/);
-  assert.match(newGames, /<h2>Ghép thành công!<\/h2><img className="jigsaw-unlocked-full-image" src=\{chosen\?\.url\|\|DEFAULT_IMAGE\}/);
+  assert.match(newGames, /className="jigsaw-unlocked-full-image" src=\{chosen\?\.url\|\|DEFAULT_IMAGE\}/);
 });
 
 test('full-image viewers preserve the original aspect ratio and fit small screens', () => {
