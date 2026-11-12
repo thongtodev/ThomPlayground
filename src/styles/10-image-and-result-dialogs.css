@@ -555,13 +555,36 @@
 /* v1.53.7 · Full-size previews opened from the newly-unlocked image screen */
 
 .onet-unlocked-image-button {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 212px);
+  max-width: 100%;
   padding: 0;
   border: 0;
   border-radius: 13px;
   background: transparent;
   cursor: zoom-in;
   touch-action: manipulation;
+}
+/* Keep reward photos fully visible; the label is BELOW the picture, never on top. */
+.onet-unlocked-image-button > img {
+  display: block;
+  width: min(100%, 200px);
+  height: auto;
+  max-height: min(34dvh, 260px);
+  object-fit: contain;
+}
+.onet-unlocked-image-button > .onet-reward-image-label {
+  position: static;
+  inset: auto;
+  display: block;
+  max-width: 100%;
+  background: transparent;
+  color: #694e66;
+  text-align: center;
+  white-space: normal;
 }
 
 .onet-unlocked-image-button:focus-visible,

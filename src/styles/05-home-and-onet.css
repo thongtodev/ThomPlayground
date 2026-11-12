@@ -464,7 +464,7 @@
 }
 .onet-rule-preview:not(:empty){display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem .8rem;padding:.5rem;text-align:center;font-size:.85rem}
 .onet-unlocked-image-button{position:relative}
-.onet-unlocked-image-button>span{position:absolute;bottom:.4rem;left:.4rem;background:#262638;color:white;padding:.2rem .45rem;border-radius:.5rem;font-size:.8rem}
+.onet-unlocked-image-button>span{position:static;display:block;background:transparent;color:#694e66;padding:0 .25rem;border-radius:0;font-size:.82rem;font-weight:700;line-height:1.35;text-align:center}
 .onet-zones>.onet-cell:nth-child(6n+3){border-right:3px solid #77598d}
 .onet-zones>.onet-cell:nth-child(n+19):nth-child(-n+24){border-bottom:3px solid #77598d}
 .onet-zone-map{display:inline-grid;grid-template-columns:repeat(2,1.6rem);border:1px solid currentColor;border-radius:.4rem}
