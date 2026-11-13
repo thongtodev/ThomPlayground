@@ -20,8 +20,8 @@ test('Thơm X Thơm O names its computer opponent as chú Thơm everywhere in th
 });
 
 test('Tic achievements use chú Thơm terminology while preserving their metric IDs', () => {
-  assert.match(features, /id:'tic-five',[^\n]*description:'Thắng chú Thơm 5 ván'/);
-  assert.match(features, /id:'tic-streak',[^\n]*description:'Thắng chú Thơm 3 ván liên tiếp'/);
+  assert.match(features, /id:'tic-five',[^\n]*description:'Chim cá thắng chú Thơm tổng cộng 5 ván/);
+  assert.match(features, /id:'tic-streak',[^\n]*description:'Chim cá thắng chú Thơm 3 ván X O liền nhau/);
   assert.match(features, /\['tic_ai_wins','Số lần thắng chú Thơm'\]/);
   assert.match(features, /metric:'tic_ai_wins'/);
 });

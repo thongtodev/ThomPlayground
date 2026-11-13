@@ -10,6 +10,7 @@ import {levelLabel} from './levelLabels';
 const fmt=value=>Number(value).toLocaleString('vi-VN',{maximumFractionDigits:2});
 const difficulty={easy:'Dễ',medium:'Trung bình',hard:'Khó',impossible:'Không thể đánh bại',expert:'Chuyên gia'};
 function challengeLabel(game,variant,album){
+ if(game==='thom-diamond')return 'Màn '+variant.slice(6);
  if(album)return levelLabel(album,variant);
  if(game==='onet'||game==='miner')return 'Level '+variant.slice(6);
  if(difficulty[variant])return difficulty[variant];
@@ -34,7 +35,7 @@ function breakdownValue(game,v,best,record){
  if(game==='mines')return fmt(best)+' giây';
  if(game==='reaction')return fmt(best)+' ms';
  if(game==='tic'||game==='connect4')return 'Đã thắng';
- return fmt(best)+' dép';
+ return fmt(best)+' '+rankUnit(game);
 }
 function RankDetails({game,album,row,onClose}){
  const dialog=useRef(null),list=useRef(null);

@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 
 const read = file => readFileSync(new URL('../src/' + file, import.meta.url), 'utf8');
-const games = ['MinesGame', 'MoleGame', 'TicGame', 'ReactionGame', 'PuzzleGame', 'OnetGame', 'ConnectFourGame', 'SimonSaysGame', 'JigsawGame', 'MinerGame', 'UnoGame'];
+const games = ['MinesGame', 'MoleGame', 'TicGame', 'ReactionGame', 'PuzzleGame', 'OnetGame', 'ConnectFourGame', 'SimonSaysGame', 'JigsawGame', 'MinerGame', 'UnoGame', 'ThomDiamondGame'];
 
-test('each game has an independent module and the application imports all eleven', () => {
+test('each game has an independent module and the application imports all twelve', () => {
   const app = read('App.jsx');
   for (const name of games) {
     const source = read(`games/${name}.jsx`);
@@ -19,7 +19,7 @@ test('each game has an independent module and the application imports all eleven
 test('stylesheet entry imports only existing files in a deliberate order', () => {
   const source = read('styles.css');
   const imports = [...source.matchAll(/@import ['"]([^'"]+)['"]/g)];
-  assert.equal(imports.length, 15);
+  assert.equal(imports.length, 16);
   imports.forEach(([, file], index) => {
     assert.ok(existsSync(new URL('../src/' + file, import.meta.url)));
     assert.ok(file.includes(`/${String(index + 1).padStart(2, '0')}-`));

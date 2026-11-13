@@ -9,7 +9,7 @@ import { useSound } from './hooks/useSound';
 import { resolveAlbum } from './albumUtils';
 import OnetGame from './games/OnetGame.jsx';
 import Admin from './Admin';
-import { DEFAULT_IMAGE, loadAssets, loadGallery } from './assetStore';
+import { DEFAULT_IMAGE, loadAssets, loadGallery, CLOUD, verifyAdmin } from './assetStore';
 import { DEFAULT_CONFIG, getProgress, reconcileProgress, loadGameConfig, trackEvent, youtubeEmbed } from './gameFeatures';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LeaderboardPage, { LeaderboardResultModal } from './Leaderboard';
@@ -26,6 +26,7 @@ import { PuzzleGame } from './games/PuzzleGame.jsx';
 import { ConnectFourGame } from './games/ConnectFourGame.jsx';
 import { SimonSaysGame } from './games/SimonSaysGame.jsx';
 import { JigsawGame } from './games/JigsawGame.jsx';
+import ThomDiamondGame from './games/ThomDiamondGame.jsx';
 
 const getGameIdFromPath=()=>{const match=window.location.pathname.match(/^\/games\/([^/]+)\/?$/);if(!match)return null;const id=decodeURIComponent(match[1]);return GAMES.some(game=>game.id===id)?id:null;};
 
@@ -48,7 +49,7 @@ function Header({onAlbums,onHome,sound,setSound,images,onCollection,onLeaderboar
 function Home({onChoose,records,images,onLeaderboard,progress,albums,games}) {
  const [expanded,setExpanded]=useState(false);
  const totals=useMemo(()=>{
-  const rows=getPersonalBests().map(b=>({game_id:b.gameId,variant:b.variant,metric_kind:b.metricKind,metric_value:b.metricValue,player_id:'local',details:{scoreVersion:2}}));
+  const rows=getPersonalBests().map(b=>({game_id:b.gameId,variant:b.variant,metric_kind:b.metricKind,metric_value:b.metricValue,player_id:'local',details:{scoreVersion:2,...b.details}}));
   for(const game of ['puzzle','jigsaw']){
    for(const [id,item] of Object.entries(progress[game+'Collection']||{})){
     for(const mode of ['easy','hard'])if(item[mode])rows.push({game_id:game,variant:id+'-'+mode,metric_kind:'steps',metric_value:1,player_id:'local'});
@@ -65,7 +66,7 @@ function Home({onChoose,records,images,onLeaderboard,progress,albums,games}) {
  },[records,progress,albums,games]);
  return <main className="home-page"><section className="hero"><div className="hero-copy"><div className="hero-title-row"><h1>Một chút vui,<br/><em>cả ngày thơm!</em></h1></div><p>Ghé chơi vài phút, thử tài phản xạ, đấu trí và khám phá các trò chơi nhỏ xinh cùng chú Thơm nhé.</p>{games.length>0&&<button className="primary-button" onClick={()=>onChoose(games[0].id)}><Icon name="play" size={17}/> Chơi ngay</button>}<div className="hero-foot"><span><Icon name="gamepad" size={14}/> {games.length} trò chơi</span><span><Icon name="clock" size={14}/> Chơi miễn phí</span></div></div><div className="hero-image"><img src={images.hero||DEFAULT_IMAGE} alt="Ảnh banner Thơm Playground"/></div></section>
   <section className="section-heading"><div><h2>Hôm nay chơi gì?</h2></div><span className="section-count">{String(games.length).padStart(2,'0')} GAMES <Icon name="sparkles" size={15}/></span></section>
-  <section className="game-grid">{games.length===0&&<p className="no-games-message">Các trò chơi đang tạm đóng. Hẹn bạn quay lại nhé!</p>}{games.map((g,i)=><button key={g.id} className={`game-card ${g.color}`} onClick={()=>onChoose(g.id)}><div className="card-top"><span className="game-number">0{i+1} / MINI GAME</span></div><div className="game-icon">{<img src={images[`card-${g.id}`]||DEFAULT_IMAGE} alt={`Hình ${g.name}`} loading="lazy"/>}</div><div className="game-card-info"><span className="game-en">{g.en}</span><h3>{g.name}</h3><p>{g.desc}</p><div className="card-meta"><span>{g.level}</span><span><Icon name="clock" size={13}/> {g.time}</span></div></div></button>)}</section>
+  <section className="game-grid">{games.length===0&&<p className="no-games-message">Các trò chơi đang tạm đóng. Hẹn bạn quay lại nhé!</p>}{games.map(g=><button key={g.id} className={`game-card ${g.color}`} onClick={()=>onChoose(g.id)}><div className="card-top"><span className="game-number">{String(GAMES.indexOf(g)+1).padStart(2,'0')} / MINI GAME</span></div><div className="game-icon">{<img src={images[`card-${g.id}`]||(g.id==='thom-diamond'?'/thom-kim-cuong/tiles/tkc_01.webp':DEFAULT_IMAGE)} alt={`Hình ${g.name}`} loading="lazy"/>}</div><div className="game-card-info"><span className="game-en">{g.en}</span><h3>{g.name}</h3><p>{g.desc}</p><div className="card-meta"><span>{g.level}</span><span><Icon name="clock" size={13}/> {g.time}</span></div></div></button>)}</section>
   {totals.length>0&&<section className="home-records"><h2>Thành tích của bạn</h2><p>Thành tích trên thiết bị này</p>
    <div id="home-record-list">{(expanded?totals:totals.slice(0,3)).map(({game,label})=><button type="button" key={game.id} onClick={()=>onLeaderboard(game.id)} className="home-record-row"><Icon name={game.icon} size={20}/><span>{game.name}</span><strong>{label}</strong></button>)}</div>
    {totals.length>3&&<button type="button" className="home-record-more" aria-expanded={expanded} aria-controls="home-record-list" onClick={()=>setExpanded(!expanded)}>{expanded?'Thu gọn':`Xem thêm ${totals.length-3} trò`}</button>}
@@ -113,7 +114,7 @@ function RadioPlayer({radio,images}){
  const toggleAudio=()=>setAudioOn(value=>!value);
  return <aside className={`radio-player ${open?'expanded':'compact'}`} aria-label="Trình phát nhạc">
   <div className="radio-controls">
-   <button className="radio-toggle" onClick={()=>setOpen(o=>!o)} aria-expanded={open}>
+   <button className="radio-toggle" onClick={()=>setOpen(o=>!o)} aria-expanded={open} aria-label={open?'Thu gọn trình phát nhạc':'Mở trình phát nhạc'}>
     <SiteIcon slot="radio" images={images} fallback="music"/><span>{radio.title||'Thơm Radio'}</span><small>{audioOn?'Đang bật tiếng':'Tự phát · Chạm để bật tiếng'}</small><b><Icon name={open?'chevron-down':'chevron-up'} size={16}/></b>
    </button>
    <button type="button" className="radio-volume" onClick={toggleAudio} aria-label={audioOn?'Tắt tiếng nhạc':'Bật tiếng nhạc'} title={audioOn?'Tắt tiếng nhạc':'Bật tiếng nhạc'}><Icon name={audioOn?'volume-2':'volume-x'} size={18}/></button>
@@ -125,6 +126,13 @@ function RadioPlayer({radio,images}){
 }
 
 function App(){
+ const [diamondTest,setDiamondTest]=useState(false);
+ const openDiamondTest=async()=>{
+  if(!(CLOUD?await verifyAdmin():import.meta.env.DEV))throw new Error('Vui lòng đăng nhập bằng tài khoản admin.');
+  setDiamondTest(true);setSelected('thom-diamond');setRoute('home');
+  window.history.pushState({},'', '/games/thom-diamond');
+ };
+
  const [selected,setSelected]=useState(getGameIdFromPath);
  const [albumTarget,setAlbumTarget]=useState(()=>window.location.hash.slice(1));
  const [route,setRoute]=useState(getRouteFromPath);
@@ -163,9 +171,9 @@ function App(){
  },[]);
  useEffect(()=>{refreshAssets();},[refreshAssets]);
  useEffect(()=>{const link=document.querySelector('link[rel=icon]');if(link)link.href=images['icon-logo']||DEFAULT_IMAGE;},[images]);
- useEffect(()=>{const onPop=()=>{setAlbumTarget(window.location.hash.slice(1));setRoute(getRouteFromPath());setSelected(getGameIdFromPath());setPendingGameResult(null);setGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;};window.addEventListener('popstate',onPop);return()=>window.removeEventListener('popstate',onPop);},[]);
+ useEffect(()=>{const onPop=()=>{setDiamondTest(false);setAlbumTarget(window.location.hash.slice(1));setRoute(getRouteFromPath());setSelected(getGameIdFromPath());setPendingGameResult(null);setGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;};window.addEventListener('popstate',onPop);return()=>window.removeEventListener('popstate',onPop);},[]);
  const saveRecord=useCallback((id,record)=>{setRecords(old=>{const current=old[id];const better=!current||(record.kind==='time'?record.value<current.value:record.kind==='steps'?record.value<current.value:record.value>current.value);const next=better?{...old,[id]:record}:old;writeStore({records:next});return next;});},[]);
- const onHome=()=>{if(window.location.pathname!=='/'){window.history.pushState({},'', '/');}setRoute('home');setSelected(null);setGameResult(null);setPendingGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;};
+ const onHome=()=>{setDiamondTest(false);if(window.location.pathname!=='/'){window.history.pushState({},'', '/');}setRoute('home');setSelected(null);setGameResult(null);setPendingGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;};
  const onAlbums=(gameId='')=>{
   const path='/albums'+(gameId?'#'+gameId:'');
   if(window.location.pathname+window.location.hash!==path)window.history.pushState({},'',path);
@@ -175,9 +183,9 @@ function App(){
  const onLeaderboard=(gameId=selected)=>{window.history.pushState({},'',gameId?'/leaderboard?game='+encodeURIComponent(gameId):'/leaderboard');window.scrollTo(0,0);setRoute('leaderboard');setSelected(null);setGameResult(null);setPendingGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;};
  const albums=useMemo(()=>({puzzle:resolveAlbum(config.puzzleAlbum,gallery),jigsaw:resolveAlbum(config.jigsawAlbum,gallery)}),[config,gallery]);
  const availableGames=getVisibleGames(GAMES,config.gameAvailability);
- const chooseGame=id=>{if(configReady&&config.gameAvailability?.[id]!==false){window.history.pushState({},'',`/games/${encodeURIComponent(id)}`);setRoute('home');setSelected(id);setGameResult(null);setPendingGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;}};
+ const chooseGame=id=>{if(configReady&&config.gameAvailability?.[id]!==false){setDiamondTest(false);window.history.pushState({},'',`/games/${encodeURIComponent(id)}`);setRoute('home');setSelected(id);setGameResult(null);setPendingGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;}};
  useEffect(()=>{if(selected&&configReady&&config.gameAvailability?.[selected]===false){setSelected(null);if(getGameIdFromPath()===selected)window.history.replaceState({},'','/');}},[selected,configReady,config.gameAvailability]);
- const onEvent=useCallback(event=>{const tracked=trackEvent(progressRef.current,event,config.rewards,availableGames.filter(game=>game.id!=='uno').map(game=>game.id));progressRef.current=tracked.progress;setProgress(tracked.progress);if(tracked.unlockedNow.length)setUnlockToast(tracked.unlockedNow.map(x=>x.title));if(event.result){savePersonalRun(event.result);const previousBest=getPersonalBests(event.result.gameId).find(x=>x.variant===(event.result.variant||'default'));const personalBest=event.result.eligible?savePersonalBest(event.result):null;const result={...event.result,personalBest,isNewBest:isNewRecord(event.result,previousBest)};if(event.type==='miner_finish'&&event.won){setPendingGameResult({...result,rewardPhoto:event.rewardPhoto});}else if(event.type==='puzzle_level_win'||event.type==='jigsaw_level_win'||event.type==='onet_win'){setPendingGameResult(result);}else{setPendingGameResult(null);setGameResult(result);}}},[config]);
+ const onEvent=useCallback(event=>{const tracked=trackEvent(progressRef.current,event,config.rewards,availableGames.map(game=>game.id));progressRef.current=tracked.progress;setProgress(tracked.progress);if(tracked.unlockedNow.length)setUnlockToast(tracked.unlockedNow.map(x=>x.title));if(event.result){savePersonalRun(event.result);const previousBest=getPersonalBests(event.result.gameId).find(x=>x.variant===(event.result.variant||'default'));const personalBest=event.result.eligible?savePersonalBest(event.result):null;const result={...event.result,personalBest,isNewBest:isNewRecord(event.result,previousBest)};if(event.type==='thom_diamond_level_win'){setPendingGameResult(result);}else if(event.type==='miner_finish'&&event.won){setPendingGameResult({...result,rewardPhoto:event.rewardPhoto});}else if(event.type==='puzzle_level_win'||event.type==='jigsaw_level_win'||event.type==='onet_win'){setPendingGameResult(result);}else{setPendingGameResult(null);setGameResult(result);}}},[config]);
  useEffect(()=>{
   if(selected!=='miner'||route!=='home'||pendingGameResult?.gameId!=='miner')return;
   const timer=setTimeout(()=>{setGameResult(pendingGameResult);setPendingGameResult(null);},900);
@@ -188,7 +196,7 @@ function App(){
  const restartGame=()=>{const id=gameResult?.gameId;setGameResult(null);setPostResultPrompt(null);postResultActionsRef.current=null;setUnlockToast([]);if(id){setSelected(id);setGameRunKey(v=>v+1);}};
  const closeLeaderboardResult=()=>{const result=gameResult;setGameResult(null);if(result&&['onet','puzzle','jigsaw','miner'].includes(result.gameId)){setPostResultPrompt({gameId:result.gameId,gameName:result.gameName,message:postResultActionsRef.current?.message,nextLabel:postResultActionsRef.current?.nextLabel||'Chơi Level tiếp theo'});}else setPostResultPrompt(null);};
  const choosePostResultAction=action=>{const actions=postResultActionsRef.current;setPostResultPrompt(null);if(action==='next'&&typeof actions?.next==='function')actions.next();else if(action==='choose'&&typeof actions?.choose==='function')actions.choose();else if(action==='home')onHome();};
- return <div className="app-shell"><Header onAlbums={onAlbums} onHome={onHome} sound={sound} setSound={setSound} images={images} onCollection={onCollection} onLeaderboard={()=>onLeaderboard()}/>{route==='admin'?<Admin onHome={onHome} onUpdated={refreshAssets}/>:route==='albums'?(configReady?<AlbumsPage key={albumTarget} target={albumTarget} games={availableGames} config={config} gallery={gallery} progress={progress} onHome={onHome}/>:<main className="collection-page">Đang tải bộ sưu tập…</main>):route==='collection'?(!configReady?<main className="home-page"><p>Đang tải thành tựu…</p></main>:<Collection onHome={onHome} config={config} progress={progress} games={availableGames}/>):route==='leaderboard'?(!configReady?<main className="home-page"><p>Đang tải bảng xếp hạng…</p></main>:<LeaderboardPage games={availableGames.filter(game=>game.id!=='uno')} onetTotal={progress.metrics.onet_total||0} albums={albums} onHome={onHome}/>):!configReady?<main className="home-page"><section className="no-games-message">{configError?<><p>Chưa tải được danh sách trò chơi.</p><button className="secondary-button" onClick={refreshAssets}>Thử lại</button></>:<p>Đang tải trò chơi…</p>}</section></main>:!selected?<Home onChoose={chooseGame} games={availableGames} records={records} images={images} progress={progress} albums={albums} onLeaderboard={onLeaderboard}/>:<>
+ return <div className={`app-shell ${selected&&route==='home'?'game-active':''}`}><Header onAlbums={onAlbums} onHome={onHome} sound={sound} setSound={setSound} images={images} onCollection={onCollection} onLeaderboard={()=>onLeaderboard()}/>{route==='admin'?<Admin onHome={onHome} onUpdated={refreshAssets} onDiamondTest={openDiamondTest}/>:route==='albums'?(configReady?<AlbumsPage key={albumTarget} target={albumTarget} games={availableGames} config={config} gallery={gallery} progress={progress} onHome={onHome}/>:<main className="collection-page">Đang tải bộ sưu tập…</main>):route==='collection'?(!configReady?<main className="home-page"><p>Đang tải thành tựu…</p></main>:<Collection onHome={onHome} config={config} progress={progress} games={availableGames}/>):route==='leaderboard'?(!configReady?<main className="home-page"><p>Đang tải bảng xếp hạng…</p></main>:<LeaderboardPage games={availableGames.filter(game=>game.id!=='uno')} onetTotal={progress.metrics.onet_total||0} albums={albums} onHome={onHome}/>):!configReady?<main className="home-page"><section className="no-games-message">{configError?<><p>Chưa tải được danh sách trò chơi.</p><button className="secondary-button" onClick={refreshAssets}>Thử lại</button></>:<p>Đang tải trò chơi…</p>}</section></main>:!selected?<Home onChoose={chooseGame} games={availableGames} records={records} images={images} progress={progress} albums={albums} onLeaderboard={onLeaderboard}/>:<>
  {selected==='mines'&&<MinesGame key={`${selected}-${gameRunKey}`} onHome={onHome} playSound={playSound} saveRecord={saveRecord} images={images} onEvent={onEvent} onRestart={runAgain}/>}
  {selected==='mole'&&<MoleGame key={`${selected}-${gameRunKey}`} onHome={onHome} playSound={playSound} saveRecord={saveRecord} images={images} onEvent={onEvent} appearance={config.moleAppearance} onRestart={runAgain}/>}
  {selected==='tic'&&<TicGame key={`${selected}-${gameRunKey}`} onHome={onHome} playSound={playSound} saveRecord={saveRecord} images={images} onEvent={onEvent} onRestart={runAgain}/>}
@@ -197,7 +205,9 @@ function App(){
  {selected==='onet'&&<OnetGame playSound={playSound} onAlbums={onAlbums} key={`${selected}-${gameRunKey}`} onHome={onHome} saveRecord={saveRecord} images={images} album={resolveAlbum(config.onetAlbum,gallery)} postResultActionsRef={postResultActionsRef} onEvent={onEvent} onResultReady={showPendingGameResult} onRestart={runAgain}/>}
  {selected==='connect4'&&<ConnectFourGame key={`${selected}-${gameRunKey}`} onHome={onHome} images={images} playSound={playSound} onEvent={onEvent} onRestart={runAgain}/>}
  {selected==='simon'&&<SimonSaysGame key={`${selected}-${gameRunKey}`} onHome={onHome} images={images} playSound={playSound} onEvent={onEvent} onRestart={runAgain}/>}
- {selected==='uno'&&<React.Suspense fallback={<main className="uno-page">Đang mở JGKiD Uno…</main>}><UnoGame soundEnabled={sound} onToggleSound={()=>setSound(v=>!v)} onHome={onHome} assets={config.unoAssets} playSound={playSound}/></React.Suspense>}
+ 
+ {selected==='uno'&&<React.Suspense fallback={<main className="uno-page">Đang mở JGKiD Uno…</main>}><UnoGame onEvent={onEvent} soundEnabled={sound} onToggleSound={()=>setSound(v=>!v)} onHome={onHome} assets={config.unoAssets} playSound={playSound}/></React.Suspense>}
+ {selected==='thom-diamond'&&<ThomDiamondGame key={`${selected}-${gameRunKey}-${diamondTest}`} onShowRanking={pendingGameResult?.gameId==='thom-diamond'?()=>showPendingGameResult():null} practice={diamondTest} onExitPractice={()=>setDiamondTest(false)} onHome={onHome} images={images} adminCrops={config.thomDiamondCrops||{}} onEvent={onEvent}/>}
  {selected==='miner'&&<MinerGame postResultActionsRef={postResultActionsRef} key={`${selected}-${gameRunKey}`} onHome={onHome} images={images} album={resolveAlbum(config.minerAlbum,gallery)} playSound={playSound} saveRecord={saveRecord} onEvent={onEvent}/>}
  {selected==='jigsaw'&&<JigsawGame playSound={playSound} onAlbums={onAlbums} key={`${selected}-${gameRunKey}`} onHome={onHome} images={images} album={resolveAlbum(config.jigsawAlbum,gallery)} jigsawProgress={progress.jigsawCollection||{}} postResultActionsRef={postResultActionsRef} saveRecord={saveRecord} onEvent={onEvent} onResultReady={showPendingGameResult} onRestart={runAgain}/>}
  </>}{route==='home'&&gameResult?.rewardPhoto&&<MinerRewardDialog onAlbums={onAlbums} photo={gameResult.rewardPhoto} level={gameResult.details.level} onContinue={()=>setGameResult(current=>current&&({...current,rewardPhoto:null}))}/>}

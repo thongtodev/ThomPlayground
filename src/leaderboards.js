@@ -34,6 +34,7 @@ export function savePersonalBest(entry) {
       metricKind: entry.metricKind,
       metricValue: Number(entry.metricValue),
       metricLabel: entry.metricLabel,
+      details: entry.details,
       achievedAt: new Date().toISOString(),
     };
     try { localStorage.setItem(PERSONAL_KEY, JSON.stringify(all)); } catch {}
@@ -110,7 +111,7 @@ export async function loadRankingDetails(game,who,album=[],page=0){
   }
  }
  const indices=new Map(album.map((img,i)=>[img.id,i]));
- const order=v=>(game==='onet'||game==='miner')?Number(v.slice(6)):indices.get(v.replace(/-(easy|hard)$/,''))??({easy:1,medium:2,hard:3,expert:4}[v]||0);
+ const order=v=>(game==='onet'||game==='miner'||game==='thom-diamond')?Number(v.slice(6)):indices.get(v.replace(/-(easy|hard)$/,''))??({easy:1,medium:2,hard:3,expert:4}[v]||0);
  return Object.entries(player?.breakdown||{}).sort(([a],[b])=>order(a)-order(b)||a.localeCompare(b,'vi',{numeric:true}))
   .slice(offset,offset+13).map(([variant,best])=>({variant,best,...layouts.get(variant)}));
 }

@@ -11,13 +11,14 @@ alter table public.game_assets add column if not exists transform jsonb;
 delete from public.game_assets where slot='icon-hammer';
 alter table public.game_assets drop constraint if exists valid_slot;
 alter table public.game_assets add constraint valid_slot check (slot in (
+ 'card-uno','card-thom-diamond',
  'card-miner','icon-miner','miner-character','miner-slipper','miner-pair','miner-gold','miner-mic','miner-rock','miner-boulder','miner-clock','miner-magnet','miner-boost',
  'hero','card-mines','card-mole','card-tic','card-reaction','card-puzzle','card-onet','card-connect4','card-simon','card-jigsaw','mines','mole','mole-bomb','mole-trap','tic-x','tic-o','reaction','reaction-bomb','puzzle-1','puzzle-2','puzzle-3','connect4-red','connect4-yellow','simon-1','simon-2','simon-3','simon-4',
  'icon-logo','icon-home','icon-onet','icon-connect4','icon-simon','icon-jigsaw','card-onet','icon-slipper','icon-sound-on','icon-sound-off','icon-bomb','icon-mines','icon-mole','icon-tic','icon-reaction','icon-puzzle','icon-trophy','icon-gallery','icon-radio','icon-flag','icon-play','icon-pause','icon-reset','icon-lock','icon-micro'
 ));
-create table if not exists public.game_settings (key text primary key, value jsonb not null, updated_at timestamptz not null default now(), constraint valid_setting check (key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum')));
+create table if not exists public.game_settings (key text primary key, value jsonb not null, updated_at timestamptz not null default now(), constraint valid_setting check (key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum','unoAssets','thomDiamondCrops')));
 alter table public.game_settings drop constraint if exists valid_setting;
-alter table public.game_settings add constraint valid_setting check (key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum'));
+alter table public.game_settings add constraint valid_setting check (key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum','unoAssets','thomDiamondCrops'));
 create or replace function public.is_game_admin() returns boolean language sql stable security definer set search_path = public as $$
  select exists(select 1 from public.game_admins where user_id=auth.uid());
 $$;
@@ -79,7 +80,7 @@ create table if not exists public.game_leaderboards (
  metric_label text not null,
  details jsonb not null default '{}'::jsonb,
  created_at timestamptz not null default now(),
- constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner')),
+ constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner','thom-diamond')),
  constraint valid_leaderboard_variant check (char_length(variant) between 1 and 100),
  constraint valid_leaderboard_variant_label check (char_length(variant_label) between 1 and 80),
  constraint valid_leaderboard_player_name check (char_length(btrim(player_name)) between 2 and 24),
@@ -89,7 +90,7 @@ create table if not exists public.game_leaderboards (
  constraint valid_leaderboard_details check (jsonb_typeof(details) = 'object')
 );
 alter table public.game_leaderboards drop constraint if exists valid_leaderboard_game;
-alter table public.game_leaderboards add constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner'));
+alter table public.game_leaderboards add constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner','thom-diamond'));
 create index if not exists game_leaderboards_game_variant_metric_idx
  on public.game_leaderboards (game_id, variant, metric_kind, metric_value, created_at);
 create index if not exists game_leaderboards_created_idx
@@ -213,6 +214,7 @@ language sql stable security invoker set search_path=public as $$
     (regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
      or (r.variant in ('default-thom-easy','default-thom-hard') and not exists(select from album_ids)))
    when 'jigsaw' then r.metric_kind='steps' and r.variant ~ '-(easy|hard)$' and regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
+   when 'thom-diamond' then r.metric_kind='score' and r.variant ~ '^level-([1-9][0-9]?|100)$' and r.details->'won'='true'::jsonb
    when 'miner' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|10)$' and r.metric_value>0 and r.details->>'won'='true'
    when 'simon' then r.metric_kind='score' and r.variant in ('easy','medium','hard')
    when 'onet' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|1[0-9]|20)$' and r.metric_value>=2400
@@ -274,6 +276,7 @@ language sql stable security invoker set search_path=public as $$
     (regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
      or (r.variant in ('default-thom-easy','default-thom-hard') and not exists(select from album_ids)))
    when 'jigsaw' then r.metric_kind='steps' and r.variant ~ '-(easy|hard)$' and regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
+   when 'thom-diamond' then r.metric_kind='score' and r.variant ~ '^level-([1-9][0-9]?|100)$' and r.details->'won'='true'::jsonb
    when 'miner' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|10)$' and r.metric_value>0 and r.details->>'won'='true'
    when 'simon' then r.metric_kind='score' and r.variant in ('easy','medium','hard')
    when 'onet' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|1[0-9]|20)$' and r.metric_value>=2400
@@ -325,7 +328,7 @@ language sql stable security invoker set search_path=public as $$
   with ordinality e(item,ord) where s.key=p_game||'Album' group by 1
  )
  select i.variant,i.best from items i left join album a on a.img=regexp_replace(i.variant,'-(easy|hard)$','')
- order by a.idx,case when p_game in ('onet','miner') then substring(i.variant from 7)::int end,
+ order by a.idx,case when p_game in ('onet','miner','thom-diamond') then substring(i.variant from 7)::int end,
   case when i.variant in ('easy','medium','hard','expert') then array_position(array['easy','medium','hard','expert'],i.variant) end,
   i.variant collate "C" limit 13 offset greatest(p_offset,0);
 $$;
@@ -669,5 +672,5 @@ drop policy if exists uno_receive on realtime.messages;
 create policy uno_receive on realtime.messages for select to authenticated using(extension='broadcast' and public.uno_is_member(realtime.topic()));
 -- Clients cannot broadcast state or read uno_private tables.
 alter table public.game_settings drop constraint if exists valid_setting;
-alter table public.game_settings add constraint valid_setting check(key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum','unoAssets'));
+alter table public.game_settings add constraint valid_setting check(key in ('rewards','radio','puzzleAlbum','moleAppearance','gameAvailability','onetAlbum','jigsawAlbum','minerAlbum','unoAssets','thomDiamondCrops'));
 commit;

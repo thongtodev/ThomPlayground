@@ -66,3 +66,12 @@ Kiểm tra thao tác: khởi chạy cả 9 game ở hai kích thước màn hìn
 - Giữ nguyên bộ sưu tập đã lưu, luật chơi và giới hạn 24 cặp. Chơi lại một Level vẫn nhận hình nếu còn hình chưa mở, như cơ chế trước.
 - Màn chọn Level hiển thị số hình được mở khi thắng.
 - Kiểm tra: 167/167 test đạt, build production thành công.
+
+## Thơm Lấp Lánh (v1.69.0)
+
+- Player component: `src/games/ThomDiamondGame.jsx`.
+- Match-3 rules and board engine: `src/thomDiamondEngine.js`.
+- 100 level configs and world mappings: `src/data/thomDiamondLevels.json` (derived from the supplied v1.1 workbook).
+- Admin crop panel: `src/ThomDiamondAdmin.jsx`; crop metadata is persisted as `game_settings.thomDiamondCrops` and does not modify source images.
+- Original image files live under `public/thom-kim-cuong/originals/`; gameplay uses the full-frame optimized WebP files under `public/thom-kim-cuong/tiles/`.
+- Guest progress and best stars/scores are stored under `thom-kim-cuong-progress-v1` in local storage.

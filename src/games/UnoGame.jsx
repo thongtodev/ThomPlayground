@@ -10,7 +10,7 @@ import {unoClient,connectUno,unoRequest} from '../uno/client';
 import {UnoCard,CARD_MAP,COLORS} from '../uno/Card';
 const ROOM_KEY='thom-uno-room-v1';
 const readRoom=()=>{try{return localStorage.getItem(ROOM_KEY)||'';}catch{return '';}};
-export function UnoGame({onHome,assets={},playSound=()=>{},soundEnabled=true,onToggleSound=()=>{}}){
+export function UnoGame({onHome,onEvent,assets={},playSound=()=>{},soundEnabled=true,onToggleSound=()=>{}}){
  const mobile=useMobileTable();
  const [fullscreen,setFullscreen]=useState(()=>isFullscreenActive());
  const fullscreenBusy=useRef(false);
@@ -39,6 +39,14 @@ export function UnoGame({onHome,assets={},playSound=()=>{},soundEnabled=true,onT
  },[catchNotice]);
  const invite=new URLSearchParams(location.search).get('room')||'';
  const [room,setRoom]=useState(null),[name,setName]=useState(()=>localStorage.getItem('thom-uno-name')||''),[code,setCode]=useState(invite),[capacity,setCapacity]=useState(4),[busy,setBusy]=useState(false),[error,setError]=useState(''),[status,setStatus]=useState(''),[selected,setSelected]=useState(null),[colorPicker,setColorPicker]=useState(false),[help,setHelp]=useState(false),[copy,setCopy]=useState(''),[drawn,setDrawn]=useState([]),[drawPulse,setDrawPulse]=useState(0);
+ const recordedWin=useRef('');
+ useEffect(()=>{
+  if(room?.status!=='finished'||!room.me||room.winner!==room.me)return;
+  const round=room.id+':'+room.startedAt;
+  if(recordedWin.current===round)return;
+  recordedWin.current=round;
+  onEvent?.({type:'uno_win',completed:'uno'});
+ },[room,onEvent]);
  const [clock,setClock]=useState(()=>Date.now());
  const clockOffset=useRef(0);
  const [unoEffect,setUnoEffect]=useState(null);

@@ -2,8 +2,9 @@ import {convertLegacyScore} from './onetRewards.js';
 const duel=game=>game==='tic'||game==='connect4';
 const timed=game=>game==='mines'||game==='reaction';
 const puzzle=game=>game==='puzzle'||game==='jigsaw';
-export const rankUnit=game=>timed(game)||duel(game)?'thử thách':'dép';
+export const rankUnit=game=>game==='thom-diamond'?'điểm':timed(game)||duel(game)?'thử thách':'dép';
 export const rankingRules={
+ 'thom-diamond':'Cộng điểm cao nhất của từng màn đã thắng và gửi kỷ lục.',
  miner:'Cộng kỷ lục dép của từng Level đã thắng.',
  onet:'Cộng kỷ lục dép của từng Level.',mole:'Cộng kỷ lục dép của từng thử thách.',
  puzzle:'Mỗi ảnh trong album: Dễ 100 dép, Khó 250 dép.',jigsaw:'Mỗi ảnh trong album: Dễ 100 dép, Khó 250 dép.',
@@ -22,6 +23,7 @@ function qualifies(game,row,album){
  if(game==='onet')return kind==='score'&&/^level-([1-9]|1\d|20)$/.test(v)&&n>=2400;
  if(game==='tic')return kind==='wins'&&n>0&&/^\d+-(easy|medium|hard|impossible)$/.test(v)&&(d.mode||'ai')==='ai'&&d.winner!=='draw'&&(!d.playerMark||d.winner===d.playerMark);
  if(game==='connect4')return kind==='score'&&n>0&&/^ai-(easy|medium|hard)$/.test(v)&&(d.mode||'ai')==='ai';
+ if(game==='thom-diamond')return kind==='score'&&d.won===true&&/^level-([1-9][0-9]?|100)$/.test(v);
  if(game==='miner')return kind==='score'&&d.won===true&&/^level-([1-9]|10)$/.test(v)&&n>0;
  if(game==='simon')return kind==='score'&&['easy','medium','hard'].includes(v);
  if(game==='mines')return kind==='time'&&d.won!==false&&['easy','medium','hard','expert'].includes(v);

@@ -1,0 +1,52 @@
+{
+  "worlds": [
+    {
+      "world": 1,
+      "name": "Đời thường và gần gũi",
+      "tiles": [
+        "tkc_01",
+        "tkc_06",
+        "tkc_13",
+        "tkc_21",
+        "tkc_22",
+        "tkc_23"
+      ]
+    },
+    {
+      "world": 2,
+      "name": "Studio và thời trang",
+      "tiles": [
+        "tkc_03",
+        "tkc_05",
+        "tkc_07",
+        "tkc_14",
+        "tkc_15",
+        "tkc_17"
+      ]
+    },
+    {
+      "world": 3,
+      "name": "Sân khấu và spotlight",
+      "tiles": [
+        "tkc_04",
+        "tkc_08",
+        "tkc_10",
+        "tkc_16",
+        "tkc_18",
+        "tkc_24"
+      ]
+    },
+    {
+      "world": 4,
+      "name": "Cá tính và nổi bật",
+      "tiles": [
+        "tkc_02",
+        "tkc_09",
+        "tkc_11",
+        "tkc_12",
+        "tkc_19",
+        "tkc_20"
+      ]
+    }
+  ]
+}

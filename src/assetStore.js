@@ -2,6 +2,8 @@ import {renderSlotImage} from './imageTransforms';
 /** Asset configuration. Without Supabase credentials, uploads are stored in this browser only. */
 export const DEFAULT_IMAGE = '/assets/thom-avatar.png';
 export const ASSET_SLOTS = [
+ {id:'card-uno',label:'Ảnh đại diện JGKiD Uno',section:'Thẻ game',hint:'Ảnh thẻ trò chơi Uno trên trang chủ'},
+ {id:'card-thom-diamond',label:'Ảnh đại diện Thơm Lấp Lánh',section:'Thẻ game',hint:'Ảnh thẻ trò chơi Thơm Lấp Lánh trên trang chủ'},
   {id:'card-miner',label:'Thẻ Đào Dép Đi!',section:'Đào Dép Đi!',hint:'Ảnh PNG/WebP rõ chủ thể; nên dùng nền trong suốt'},
   {id:'icon-miner',label:'Biểu tượng Đào Dép Đi!',section:'Đào Dép Đi!',hint:'Ảnh PNG/WebP rõ chủ thể; nên dùng nền trong suốt'},
   {id:'miner-character',label:'Nhân vật chú Thơm',section:'Đào Dép Đi!',hint:'Ảnh PNG/WebP rõ chủ thể; nên dùng nền trong suốt'},

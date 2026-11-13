@@ -12,6 +12,7 @@ const GAMES = [
   { id:'jigsaw', icon:'puzzle', name:'Mảnh Ghép Nhà Thơm', en:'JIGSAW PUZZLE', desc:'Bức hình đã bị chia thành nhiều mảnh lộn xộn. Hãy xoay, kéo thả và ghép lại thật khéo nhé!', level:'Giải đố', time:'2–8 phút', color:'blue' },
   { id:'miner', icon:'slipper', name:'Đào Dép Đi!', en:'GOLD MINER', desc:'Canh móc thật khéo, kéo dép lên và né những tảng đá nặng. Chinh phục 10 Level cùng chú Thơm nhé!', level:'Khéo léo', time:'1–2 phút', color:'yellow' },
   {id:'uno',icon:'layers',name:'JGKiD Uno',en:'ONLINE CARD GAME',desc:'Rủ 2–4 người bạn vào phòng riêng, đổi màu và hô UNO cùng bộ bài Thơm!',level:'Online',time:'5–20 phút',color:'pink'},
+  { id:'thom-diamond', icon:'gem', name:'Thơm Lấp Lánh', en:'THƠM LẤP LÁNH · MATCH-3', desc:'Đổi chỗ những khuôn mặt quen thuộc, ghép thành bộ ba và chinh phục 100 màn chơi cùng chú Thơm nhé!', level:'Giải đố', time:'Không giới hạn', color:'mint' },
 ];
 
 export { GAMES };

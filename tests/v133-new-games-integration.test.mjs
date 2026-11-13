@@ -30,5 +30,5 @@ test('new games have dedicated achievements and personal leaderboard sort direct
  const features=read('../src/gameFeatures.js');
  for(const token of ['connect4_wins','simon_easy_wins','simon_hard_wins','jigsaw_wins','jigsaw_hard_wins'])assert.ok(features.includes(token));
  for(const [file,kind] of [['ConnectFourGame','score'],['SimonSaysGame','score'],['JigsawGame','steps']])assert.ok(read(`../src/games/${file}.jsx`).includes(`metricKind:'${kind}'`));
- assert.ok(features.includes("target:9"));
+ assert.ok(features.includes("allGamesGoal(GAMES.length)"));
 });

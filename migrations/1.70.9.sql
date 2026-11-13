@@ -1,15 +1,7 @@
--- Run once in Supabase SQL Editor before deploying 1.59.0.
-begin;
-alter table public.game_images drop constraint if exists valid_image_category;
-alter table public.game_images add constraint valid_image_category check (category in ('shared','home','mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner'));
-alter table public.game_assets drop constraint if exists valid_slot;
-alter table public.game_assets add constraint valid_slot check (slot in (
- 'card-miner','icon-miner','miner-character','miner-slipper','miner-pair','miner-gold','miner-mic','miner-rock','miner-boulder','miner-clock','miner-magnet','miner-boost',
- 'hero','card-mines','card-mole','card-tic','card-reaction','card-puzzle','card-onet','card-connect4','card-simon','card-jigsaw','mines','mole','mole-bomb','mole-trap','tic-x','tic-o','reaction','reaction-bomb','puzzle-1','puzzle-2','puzzle-3','connect4-red','connect4-yellow','simon-1','simon-2','simon-3','simon-4',
- 'icon-logo','icon-home','icon-onet','icon-connect4','icon-simon','icon-jigsaw','card-onet','icon-slipper','icon-sound-on','icon-sound-off','icon-bomb','icon-mines','icon-mole','icon-tic','icon-reaction','icon-puzzle','icon-trophy','icon-gallery','icon-radio','icon-flag','icon-play','icon-pause','icon-reset','icon-lock','icon-micro'
-));
+BEGIN;
 alter table public.game_leaderboards drop constraint if exists valid_leaderboard_game;
-alter table public.game_leaderboards add constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner'));
+alter table public.game_leaderboards add constraint valid_leaderboard_game check (game_id in ('mines','mole','tic','reaction','puzzle','onet','connect4','simon','jigsaw','miner','thom-diamond'));
+
 create or replace function public.game_rankings(p_game text,p_player uuid)
 returns table(id text,player_name text,"position" bigint,score numeric,secondary numeric,breakdown jsonb)
 language sql stable security invoker set search_path=public as $$
@@ -33,6 +25,7 @@ language sql stable security invoker set search_path=public as $$
     (regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
      or (r.variant in ('default-thom-easy','default-thom-hard') and not exists(select from album_ids)))
    when 'jigsaw' then r.metric_kind='steps' and r.variant ~ '-(easy|hard)$' and regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
+   when 'thom-diamond' then r.metric_kind='score' and r.variant ~ '^level-([1-9][0-9]?|100)$' and r.details->'won'='true'::jsonb
    when 'miner' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|10)$' and r.metric_value>0 and r.details->>'won'='true'
    when 'simon' then r.metric_kind='score' and r.variant in ('easy','medium','hard')
    when 'onet' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|1[0-9]|20)$' and r.metric_value>=2400
@@ -63,12 +56,6 @@ language sql stable security invoker set search_path=public as $$
  select who,ranked.player_name,ranked.position,ranked.score,ranked.secondary,ranked.breakdown
  from ranked where ranked.position<=9 or who=p_player::text order by ranked.position;
 $$;
-revoke all on function public.game_rankings(text,uuid) from public;
-grant execute on function public.game_rankings(text,uuid) to anon,authenticated;
-
-create index if not exists game_ranking_detail_lookup on public.game_leaderboards
- (game_id,(coalesce(player_id::text,'legacy:'||lower(btrim(player_name)))),variant);
-
 create or replace function public.ranking_runs(p_game text,p_who text)
 returns table(who text,player_name text,created_at timestamptz,id bigint,variant text,val numeric,streak int)
 language sql stable security invoker set search_path=public as $$
@@ -94,6 +81,7 @@ language sql stable security invoker set search_path=public as $$
     (regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
      or (r.variant in ('default-thom-easy','default-thom-hard') and not exists(select from album_ids)))
    when 'jigsaw' then r.metric_kind='steps' and r.variant ~ '-(easy|hard)$' and regexp_replace(r.variant,'-(easy|hard)$','') in (select image_id from album_ids)
+   when 'thom-diamond' then r.metric_kind='score' and r.variant ~ '^level-([1-9][0-9]?|100)$' and r.details->'won'='true'::jsonb
    when 'miner' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|10)$' and r.metric_value>0 and r.details->>'won'='true'
    when 'simon' then r.metric_kind='score' and r.variant in ('easy','medium','hard')
    when 'onet' then r.metric_kind='score' and r.variant ~ '^level-([1-9]|1[0-9]|20)$' and r.metric_value>=2400
@@ -106,32 +94,6 @@ language sql stable security invoker set search_path=public as $$
    when 'mole' then r.metric_kind='score' else false end
  ) select * from runs;
 $$;
-create or replace function public.ranking_summary(p_game text,p_player uuid)
-returns table(id text,player_name text,"position" bigint,score numeric,secondary numeric)
-language sql stable security invoker set search_path=public as $$
- with runs as (select * from public.ranking_runs(p_game,null)),
- per_variant as (
-  select who,variant,case when p_game in ('mines','reaction','puzzle','jigsaw') then min(val) else max(val) end best,
-   max(streak) streak from runs group by who,variant
- ), totals as (
-  select who,sum(case when p_game in ('puzzle','jigsaw') then case when variant like '%-hard' then 250 else 100 end
-    when p_game='simon' then best*case variant when 'hard' then 3 when 'medium' then 2 else 1 end
-    when p_game in ('tic','connect4','mines','reaction') then 1 else best end) score,
-   case when p_game='mines' then sum(best) when p_game='reaction' then avg(best)
-    when p_game in ('tic','connect4') then max(streak) else 0 end secondary from per_variant group by who
- ), names as (
-  select distinct on (who) who,player_name from runs order by who,created_at desc,id desc
- ), ranked as (
-  select t.*,n.player_name,row_number() over(order by score desc,
-    case when p_game in ('tic','connect4') then -secondary else secondary end,who collate "C") as position
-  from totals t join names n using(who)
- )
- select who,ranked.player_name,ranked.position,ranked.score,ranked.secondary
- from ranked where ranked.position<=9 or who=p_player::text order by ranked.position;
-$$;
-revoke all on function public.ranking_summary(text,uuid) from public;
-grant execute on function public.ranking_summary(text,uuid) to anon,authenticated;
-
 create or replace function public.ranking_detail_page(p_game text,p_who text,p_offset int default 0)
 returns table(variant text,best numeric)
 language sql stable security invoker set search_path=public as $$
@@ -145,11 +107,8 @@ language sql stable security invoker set search_path=public as $$
   with ordinality e(item,ord) where s.key=p_game||'Album' group by 1
  )
  select i.variant,i.best from items i left join album a on a.img=regexp_replace(i.variant,'-(easy|hard)$','')
- order by a.idx,case when p_game in ('onet','miner') then substring(i.variant from 7)::int end,
+ order by a.idx,case when p_game in ('onet','miner','thom-diamond') then substring(i.variant from 7)::int end,
   case when i.variant in ('easy','medium','hard','expert') then array_position(array['easy','medium','hard','expert'],i.variant) end,
   i.variant collate "C" limit 13 offset greatest(p_offset,0);
 $$;
-revoke all on function public.ranking_runs(text,text),public.ranking_detail_page(text,text,int) from public;
-grant execute on function public.ranking_runs(text,text),public.ranking_detail_page(text,text,int) to anon,authenticated;
-
-commit;
+COMMIT;

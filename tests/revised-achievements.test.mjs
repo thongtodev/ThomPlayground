@@ -10,7 +10,7 @@ test('existing collections and active games reconcile; only valid runs advance r
  try {
   const {mergeConfig,trackEvent,reconcileProgress}=await vite.ssrLoadModule('/src/gameFeatures.js');
   const config=mergeConfig({gameAvailability:{reaction:false,mines:false}});
-  const active=Object.keys(config.gameAvailability).filter(id=>id!=='uno'&&config.gameAvailability[id]);
+  const active=Object.keys(config.gameAvailability).filter(id=>config.gameAvailability[id]);
   const old={completed:[...active.slice(1),'reaction','mines'],metrics:{},unlocked:{'connect4-master':true},puzzleCollection:{},jigsawCollection:{}};
   store.set('thom-onet-progress-v1',JSON.stringify({collection:Array.from({length:30},(_,i)=>String(i))}));
   let p=reconcileProgress(old,config,[]);
@@ -52,4 +52,47 @@ test('retired runs disappear from browser history, bests and local rankings whil
   assert.ok(!v.includes(retired));assert.ok(v.includes('Level mặc định'));
  }
  assert.equal(levelLabel([{id:'active'}],retired),'');
+});
+
+test('global badge follows home availability, including Uno and zero active games',async()=>{
+ const vite=await createServer({server:{middlewareMode:true},appType:'custom'});
+ globalThis.localStorage={getItem:()=>null,setItem:()=>{}};
+ try{
+  const {mergeConfig,reconcileProgress}=await vite.ssrLoadModule('/src/gameFeatures.js');
+  const {GAMES}=await vite.ssrLoadModule('/src/games/catalog.js');
+  const ids=GAMES.map(g=>g.id);
+  const savedReward={id:'all-nine',game:'all',target:9,description:'Hoàn thành cả 9 trò chơi'};
+  const check=(enabled,old)=>{
+   const config=mergeConfig({gameAvailability:Object.fromEntries(ids.map(id=>[id,enabled.includes(id)])),rewards:[savedReward]});
+   const badge=config.rewards.find(r=>r.id==='all-nine');
+   assert.equal(badge.target,enabled.length);
+   assert.ok(badge.description.includes(String(enabled.length)));
+   return reconcileProgress(old,config,[]);
+  };
+  const partial={completed:ids.filter(id=>id!=='uno'),metrics:{},unlocked:{}};
+  let p=check(ids,partial);
+  assert.equal(p.metrics.active_games_completed,11);
+  assert.ok(!p.unlocked['all-nine']);
+  p=check(partial.completed,p);
+  assert.ok(p.unlocked['all-nine']);
+  p=check(ids,p);
+  assert.ok(!p.unlocked['all-nine']);
+  p=check(ids,{...p,completed:ids});
+  assert.ok(p.unlocked['all-nine']);
+  p=check([],p);
+  assert.equal(p.metrics.active_games_completed,0);
+  assert.ok(!p.unlocked['all-nine']);
+ }finally{await vite.close();delete globalThis.localStorage;}
+});
+
+test('all preset badges speak to chim cá and saved descriptions upgrade without replacing admin copy',async()=>{
+ const vite=await createServer({server:{middlewareMode:true},appType:'custom'});
+ try{
+  const {DEFAULT_REWARDS,mergeConfig}=await vite.ssrLoadModule('/src/gameFeatures.js');
+  for(const reward of DEFAULT_REWARDS)assert.match(reward.description,/chim cá/i,reward.id);
+  const mole=DEFAULT_REWARDS.find(r=>r.id==='mole-300');
+  const resolve=changes=>mergeConfig({rewards:[{...mole,...changes}]}).rewards.find(r=>r.id===mole.id);
+  assert.equal(resolve({description:'Đạt 300 dép trong Tặng dép'}).description,mole.description);
+  assert.equal(resolve({description:'Lời nhắn của admin'}).description,'Lời nhắn của admin');
+ }finally{await vite.close();}
 });

@@ -124,3 +124,29 @@
     flex-basis: 44px;
   }
 }
+
+/* Keep the same small two-button radio as UNO on every phone screen, including home and admin. */
+@media (max-width:700px), (max-width:1000px) and (pointer:coarse) and (orientation:landscape) {
+  .app-shell .radio-player.compact {
+    width:78px;
+    border-radius:10px;
+  }
+  .app-shell .radio-player.compact .radio-toggle {
+    padding:6px;
+    min-height:34px;
+    justify-content:center;
+  }
+  .app-shell .radio-player.compact .radio-toggle > span,
+  .app-shell .radio-player.compact .radio-toggle small,
+  .app-shell .radio-player.compact .radio-toggle b {
+    display:none;
+  }
+  .app-shell .radio-player.compact .radio-volume {
+    width:36px;
+    flex-basis:36px;
+    min-height:34px;
+  }
+  .app-shell .radio-player.expanded {
+    width:min(320px,80vw);
+  }
+}
