@@ -26,3 +26,9 @@ test('personal run history can be filtered by game and challenge variant',()=>{
   assert.equal(getPersonalHistory('mole','classic',storage).length,1);
   assert.equal(getPersonalHistory('mines','',storage).length,1);
 });
+
+test('old diamond wins retain the level number and stars after level names retire',()=>{
+ const run={gameId:'thom-diamond',variant:'level-93',variantLabel:'Màn 93',summary:'3 sao · Băng và bụi dày',metricValue:5000};
+ const storage={getItem:()=>JSON.stringify([run])};
+ assert.deepEqual(getPersonalHistory('thom-diamond','level-93',storage),[{...run,summary:'3 sao'}]);
+});

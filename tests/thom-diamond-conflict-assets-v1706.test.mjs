@@ -15,8 +15,9 @@ test('legacy Thơmverse labels do not appear in the game or levels',()=>{
  assert.equal(data.worlds[3].name,'Dưới Ánh Đèn');
  for(const l of data.levels)assert.doesNotMatch(`${l.name} ${l.focus||''}`,/thơmverse/i);
  assert.doesNotMatch(game,/thơmverse/i);
- assert.equal(level(91).name,'Lối về ánh đèn');
- assert.equal(level(100).name,'Đêm diễn huyền thoại');
+ assert.ok(data.levels.every(entry=>!Object.hasOwn(entry,'name')));
+ assert.match(game,/<h1>Màn \{level\.id\}<\/h1>/);
+ assert.doesNotMatch(game,/level\.worldLevel|selectedLevel\.name/);
 });
 
 test('rainbow creation and activation are enabled for objectives 11 and 12',()=>{
@@ -30,7 +31,7 @@ test('levels 41-43 do not promise prop deliveries without prop targets',()=>{
  for(const id of [41,42,43]){
   assert.equal(level(id).props,0);
   assert.ok(level(id).objectives.some(o=>o.type==='BREAK_SPEAKER'));
-  assert.doesNotMatch(level(id).name,/micro|đạo cụ|món đồ/i);
+  assert.ok(level(id).objectives.every(o=>o.type!=='DELIVER'));
  }
 });
 

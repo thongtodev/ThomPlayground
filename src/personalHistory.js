@@ -35,5 +35,11 @@ export function savePersonalRun(entry, storage = globalThis.localStorage, now = 
 export function getPersonalHistory(gameId = '', variant = '', storage = globalThis.localStorage) {
   return readHistory(storage)
     .filter(run => (!gameId || run.gameId === gameId) && (!variant || run.variant === variant))
+    .map(run => {
+      if (run.gameId !== 'thom-diamond') return run;
+      // Older wins appended the retired level name after the star count.
+      const oldSummary = /^([1-3] sao) · .+$/.exec(run.summary);
+      return oldSummary ? {...run, summary: oldSummary[1]} : run;
+    })
     .sort((a, b) => new Date(b.playedAt || 0) - new Date(a.playedAt || 0));
 }
